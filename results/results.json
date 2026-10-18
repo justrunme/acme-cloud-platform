@@ -2,10 +2,10 @@
   "schema_version": "acme.results/v1",
   "illustrative_estate": true,
   "note": "Acme is a fictional teaching estate. These are results of executing this repository's checks on its own corpus and fixtures; they are not measurements of any production system.",
-  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "inputs_sha256": "sha256:1949c7ada538c379558ad23229562769f1d18c9f0a3a15afc561a7e09a685696",
   "passed": true,
   "agent_corpus": {
-    "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+    "inputs_sha256": "sha256:1949c7ada538c379558ad23229562769f1d18c9f0a3a15afc561a7e09a685696",
     "summary": {
       "scenarios_total": 25,
       "attack_scenarios": 18,
@@ -30,7 +30,7 @@
         "actual": "REQUIRE_APPROVAL",
         "reason_code": "approval_required",
         "pass": true,
-        "envelope_sha256": "sha256:0e15f1d11daf0498e940da5e4fd8e84ec21238685e8ae18ab4f74b872629b05a"
+        "envelope_sha256": "sha256:4cee8d69867233670a46f91ebbabc93f85143da5cad297d567f693aac276486a"
       },
       {
         "id": "approval_replay_different_digest",
@@ -41,7 +41,7 @@
         "actual": "BLOCK",
         "reason_code": "approval_digest_mismatch",
         "pass": true,
-        "envelope_sha256": "sha256:cbcc64d4ea429401c234a473700c25907e8f3fa6ddef4e4334fd0e262ceb9c45"
+        "envelope_sha256": "sha256:21bc24590c17ce400ac80890854e92543120b7f520250774da9175bb510300df"
       },
       {
         "id": "approved_prod_deploy_valid_binding",
@@ -52,7 +52,7 @@
         "actual": "ALLOW",
         "reason_code": "approved_binding_valid",
         "pass": true,
-        "envelope_sha256": "sha256:14a7d028c52fe5a48ea1189c4a7920bfd02878adb104b985c89ff45535a14fd5"
+        "envelope_sha256": "sha256:c60316ac22a0a81322b4896f2c9804ca52b9f9f5efe36aa11f65f17046e7fcf7"
       },
       {
         "id": "argument_injection",
@@ -63,7 +63,7 @@
         "actual": "BLOCK",
         "reason_code": "argument_denied:shell_metacharacters",
         "pass": true,
-        "envelope_sha256": "sha256:081fdc2f1a5f61cc75dbaf6ba8ff55d72abc15aa4afb5535d8f3ceaa965bf144"
+        "envelope_sha256": "sha256:10f3d8b2f5e869dc3bcfe12bc9f6a5a6a32edd7cffe0e9dd1fb81e27d295146c"
       },
       {
         "id": "budget_store_dark",
@@ -74,7 +74,7 @@
         "actual": "BLOCK",
         "reason_code": "budget_store_down",
         "pass": true,
-        "envelope_sha256": "sha256:913e855e4678d0dd6aa23ad7ffe9faa68b6584f2bcf731762b261e35d44e51bb"
+        "envelope_sha256": "sha256:cee52dc7bfd83cb4bfab258d7e111bed53f4700501c40ce20fe9dd15da883322"
       },
       {
         "id": "cross_namespace_mutate",
@@ -85,7 +85,7 @@
         "actual": "BLOCK",
         "reason_code": "namespace_not_allowed",
         "pass": true,
-        "envelope_sha256": "sha256:28c40fedc006d90f4e25d686e99fadb2f5b7c8fa0c055b490871cf77e58800bd"
+        "envelope_sha256": "sha256:aadc329b04adbf8f96a9ea2c18a6655575699c381da347d3311c17e2bd27c1e1"
       },
       {
         "id": "direct_tool_endpoint_no_gateway",
@@ -96,7 +96,7 @@
         "actual": "BLOCK",
         "reason_code": "no_gateway_envelope",
         "pass": true,
-        "envelope_sha256": "sha256:4cdbe4a156f7b61cdea1ed0963d20fb4700e996f6b6b2961eddf2b1a6c8ae876"
+        "envelope_sha256": "sha256:431b846d61c8b8313265254b679d2deb9e32c33d5e284dced8690ebe83b661f8"
       },
       {
         "id": "evaluator_timeout",
@@ -107,7 +107,7 @@
         "actual": "BLOCK",
         "reason_code": "evaluator_timeout",
         "pass": true,
-        "envelope_sha256": "sha256:58d35b8ebb9604757afe7fc073b9e6391d95d78ad76e481647ec1d9bba1fa7ec"
+        "envelope_sha256": "sha256:183943c004c4cb68c7e55ea8f76ed545a8f98b1e555e56d1d5e181bc2a32d914"
       },
       {
         "id": "expired_approval",
@@ -118,7 +118,7 @@
         "actual": "BLOCK",
         "reason_code": "approval_expired",
         "pass": true,
-        "envelope_sha256": "sha256:049d818ceabfbd458bf7c41f8409f39de1050496b938941077a4514e20631756"
+        "envelope_sha256": "sha256:1b0f91f37a8773c070f75c254473dc407760f456ba8f5fd78dba754d7a984c98"
       },
       {
         "id": "fetch_allowlisted_docs",
@@ -129,7 +129,7 @@
         "actual": "ALLOW",
         "reason_code": "within_contract",
         "pass": true,
-        "envelope_sha256": "sha256:b35e3d62e310d8c75c231204fe6c3f2de93ba40f53e97c2a4c82c35127807792"
+        "envelope_sha256": "sha256:62fd931be9989f4ff29683b7a311d277f6fc776c7b64c9c323c38c3345bac3c1"
       },
       {
         "id": "inference_fanout_budget_exhausted",
@@ -140,7 +140,7 @@
         "actual": "BLOCK",
         "reason_code": "budget_exceeded",
         "pass": true,
-        "envelope_sha256": "sha256:3b042c020b8f8cf6342e82db56320bbcba10d089e970a49008d78a7695d3263b"
+        "envelope_sha256": "sha256:47f6befc5a5d6023a3071d5c44fbd0cee31959dc72b1ef968bc5db8822aeb520"
       },
       {
         "id": "inference_within_budget",
@@ -151,7 +151,7 @@
         "actual": "ALLOW",
         "reason_code": "within_contract",
         "pass": true,
-        "envelope_sha256": "sha256:092ae2c1330dcfe2114a5c5e4555652f1441a41cfa05ddf35caf6bc34bde71fe"
+        "envelope_sha256": "sha256:1a9dd810b99795bb37d9c112ac8e1a96070db338f79c75b81329850ede49e035"
       },
       {
         "id": "inventory_read",
@@ -162,7 +162,7 @@
         "actual": "ALLOW",
         "reason_code": "within_contract",
         "pass": true,
-        "envelope_sha256": "sha256:762523a1447c62ded09604f4a36223c432915473dd20dd5ed1ae26242137e251"
+        "envelope_sha256": "sha256:85f4eee8ca83bb567846480ea9e2bac6a903a53751258ed8291e8e07811b8401"
       },
       {
         "id": "mcp_tool_poisoning",
@@ -173,7 +173,7 @@
         "actual": "BLOCK",
         "reason_code": "catalog_digest_mismatch",
         "pass": true,
-        "envelope_sha256": "sha256:e1d611c40087eed56c457832da9f32b4b0289d0c6927714a9eb650ee98b76f5f"
+        "envelope_sha256": "sha256:d2b92f4c037a376f455bcef6fad2bdf42d0ff3603e3f2accb430b3a62e839707"
       },
       {
         "id": "path_traversal",
@@ -184,7 +184,7 @@
         "actual": "BLOCK",
         "reason_code": "argument_denied:path_traversal",
         "pass": true,
-        "envelope_sha256": "sha256:0cf1475c94e495886ba4b89a1f3de2aee5951d0c4bbb5a085b93cc283a39900d"
+        "envelope_sha256": "sha256:8d504e2c3210cf5cc60dfe0da6fa785e76e0f701a389bd1d098947481170be5b"
       },
       {
         "id": "policy_store_unavailable",
@@ -195,7 +195,7 @@
         "actual": "BLOCK",
         "reason_code": "evaluator_unavailable",
         "pass": true,
-        "envelope_sha256": "sha256:257f3d4aa441db070b35772993bad3884b561d70fa9f16b5e15def7ea72c8035"
+        "envelope_sha256": "sha256:1631500a505c66475be3dade3fdd8d9192a9ce452d58c2c15672ae09cdd17863"
       },
       {
         "id": "rate_limit_fanout",
@@ -206,7 +206,7 @@
         "actual": "BLOCK",
         "reason_code": "rate_limit_exceeded",
         "pass": true,
-        "envelope_sha256": "sha256:33c9786f4e30a9f716f3880620025c5a63a56f054ea084a2cf3c2a8ef8719bf5"
+        "envelope_sha256": "sha256:5432dc920ea784f6c007e68452da38efdfa655b697c255766ea0ef8ade0b5d87"
       },
       {
         "id": "read_workspace_file",
@@ -217,7 +217,7 @@
         "actual": "ALLOW",
         "reason_code": "within_contract",
         "pass": true,
-        "envelope_sha256": "sha256:8f871f82ff41ae3dddf4d195f082d76d3fa2eb28cd2c584ee3cb5b4afb5c1765"
+        "envelope_sha256": "sha256:9c89b02b0b8476c724773a7962a5a8039bc8c166db95b993d4f25ac90cd3fa63"
       },
       {
         "id": "sandbox_apply_low_risk",
@@ -228,7 +228,7 @@
         "actual": "ALLOW",
         "reason_code": "within_contract",
         "pass": true,
-        "envelope_sha256": "sha256:c2fbe61484074441c66d93e68c5fdaa818666b31859232c13d936950fe9e2afe"
+        "envelope_sha256": "sha256:32c75964adc577a2d9bdc8ffffadaab5af6211932eb30b663b1765419584e997"
       },
       {
         "id": "secrets_read_not_allowlisted",
@@ -239,7 +239,7 @@
         "actual": "BLOCK",
         "reason_code": "tool_not_allowed",
         "pass": true,
-        "envelope_sha256": "sha256:8cc796669df4c76bace457b220f5c63463dca79c9766f5c5944f209e1599c66b"
+        "envelope_sha256": "sha256:73b3487382623ba43e0a58433507e7e8bd9f56fbc81e949357c2b4ff9bb30b7b"
       },
       {
         "id": "ssrf_cloud_metadata",
@@ -250,7 +250,7 @@
         "actual": "BLOCK",
         "reason_code": "argument_denied:cloud_metadata_endpoint",
         "pass": true,
-        "envelope_sha256": "sha256:0a8c10b0587a192ee5181fe58b8ba994dbd90ff4eb32643b8889f0d0fa89d55d"
+        "envelope_sha256": "sha256:f6c48e27b344421c3649856ad5c9c60089d5f81809453eb5863b2e981f7bb8b0"
       },
       {
         "id": "unapproved_gitops_sync",
@@ -261,7 +261,7 @@
         "actual": "REQUIRE_APPROVAL",
         "reason_code": "approval_required",
         "pass": true,
-        "envelope_sha256": "sha256:3a762754ad425e4a52177097bd24ded828df2fd8297e4161ca195919c1f98d68"
+        "envelope_sha256": "sha256:5736351da690a7f77a4a0c520aced9ca278c98dc9692a4f11cbcf679b0ae3ac5"
       },
       {
         "id": "unapproved_prod_deploy",
@@ -272,7 +272,7 @@
         "actual": "REQUIRE_APPROVAL",
         "reason_code": "approval_required",
         "pass": true,
-        "envelope_sha256": "sha256:5c83211d206b31f81391b45a8c6c17c4c3fb5a713a0248ef9b640a56842a9edc"
+        "envelope_sha256": "sha256:afd50025463da65b2d4c51d9600fa78d312da5149b938143011ac5381651c7eb"
       },
       {
         "id": "unknown_tool",
@@ -283,7 +283,7 @@
         "actual": "BLOCK",
         "reason_code": "tool_not_in_catalog",
         "pass": true,
-        "envelope_sha256": "sha256:5449e17b383c92b5226fc9212d3c8d9528439863292ab281e3e9f6d0b284a59e"
+        "envelope_sha256": "sha256:fc6ce06cf73a58cddde5c8992e4e6a995693cb0d27592b7b2e920e766a03a67a"
       },
       {
         "id": "write_workspace_out",
@@ -294,7 +294,7 @@
         "actual": "ALLOW",
         "reason_code": "within_contract",
         "pass": true,
-        "envelope_sha256": "sha256:68e8a0b692187141ff274fff3d12db4111fb0af43ece605e91c4dffc516e5837"
+        "envelope_sha256": "sha256:e5d4881f80fa1e1378df1e29ac75af9faad5979052d82824876dd27bb2c9879c"
       }
     ]
   },

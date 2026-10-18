@@ -21,6 +21,7 @@ import os
 import sys
 import tempfile
 import time
+from datetime import datetime, timezone
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -39,7 +40,9 @@ def _request(method: str, url: str, timeout: float, body: bytes | None = None) -
 
 def decide(change_id: str, store: str, package_path: str, timeout: float, root: Path = ROOT) -> dict:
     """Return the decision record. Never raises: every failure becomes BLOCK."""
-    rec: dict = {"change": change_id, "package": package_path, "decision": "BLOCK", "reason": None, "errors": []}
+    rec: dict = {"change": change_id, "package": package_path, "decision": "BLOCK", "reason": None, "errors": [],
+                 "decided_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+                 "gate_pod": os.environ.get("HOSTNAME")}
 
     def done(decision: str, reason: str) -> dict:
         rec["decision"], rec["reason"] = decision, reason
