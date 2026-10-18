@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: budget-stale-snapshot
+chapter: "13"
+scenario: "Budget read older than freshnessSecondsMax is treated as unknown"
+request: {team: platform, model: acme-small, tokens: 1000}
+snapshot: {status: available, usedTokens: 1000, usedUsd: 0.01, ageSeconds: 3600}
+expected: BLOCK

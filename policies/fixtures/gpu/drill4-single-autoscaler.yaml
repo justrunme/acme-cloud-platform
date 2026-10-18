@@ -1,0 +1,11 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-drill4-single-autoscaler
+chapter: "14"
+scenario: "Drill 4 (control) - only KEDA controls the Deployment"
+kind: autoscaler-check
+manifests:
+  - apiVersion: keda.sh/v1alpha1
+    kind: ScaledObject
+    metadata: {name: inference-queue, namespace: ai}
+    spec: {scaleTargetRef: {name: inference}, maxReplicaCount: 4}
+expected: ALLOW

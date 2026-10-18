@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Validate evidence packages (schema + digests + rules)
+        run: make validate
+      - name: Run agent security corpus
+        run: make corpus
+      - name: Verify envelopes
+        run: make envelopes
+      - name: Policy schemas and admission fixtures
+        run: make policies
+      - name: Restore decisions
+        run: make restore
+      - name: Negative checks
+        run: make negative
+      - name: Tests
+        run: make test
+      - name: Regenerate results.json and EVIDENCE.md and fail on drift
+        run: make check-generated
+      - name: Upload machine results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: acme-results
+          path: |
+            results/
+            docs/EVIDENCE.md

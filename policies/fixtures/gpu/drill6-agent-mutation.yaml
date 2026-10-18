@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-drill6-agent-mutation
+chapter: "14"
+scenario: "Drill 6 - platform agent asks for more inference GPUs"
+request: {tenant: inference, gpus: 2, gpuClass: nvidia-l4, initiator: agent}
+snapshot: {status: available, tenantAllocated: {inference: 1}, poolAllocated: 3}
+expected: REQUIRE_APPROVAL

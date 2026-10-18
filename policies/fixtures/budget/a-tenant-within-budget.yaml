@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: budget-a-tenant-within-budget
+chapter: "13"
+scenario: "A (control) - same tenant with remaining budget"
+request: {team: orders-assistant, model: acme-small, tokens: 800}
+snapshot: {status: available, usedTokens: 1200000, usedUsd: 0.48, ageSeconds: 40}
+expected: ALLOW

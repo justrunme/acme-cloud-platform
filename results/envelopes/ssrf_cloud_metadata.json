@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": "1.0.0",
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": "sha256:3b4754c19d12fb29fdcd7045c08eb40a8d24dd7a3e661c0d138777967b852575",
+  "scenario_id": "ssrf_cloud_metadata",
+  "trace_id": "tr-ssrf",
+  "verdict": "BLOCK",
+  "reason_code": "argument_denied:cloud_metadata_endpoint",
+  "reason": "call-1: argument matches deny pattern cloud_metadata_endpoint",
+  "acs_disposition": "DENY",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "http.fetch",
+      "verdict": "BLOCK",
+      "reason_code": "argument_denied:cloud_metadata_endpoint",
+      "request_digest": "sha256:38f34fda3d369baa8668dab2fc0f300db71125c95017b4f28670ec058a91f5d1"
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:0a8c10b0587a192ee5181fe58b8ba994dbd90ff4eb32643b8889f0d0fa89d55d"
+}

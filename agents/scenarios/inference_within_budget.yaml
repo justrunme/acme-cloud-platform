@@ -1,0 +1,29 @@
+# Acme agent corpus scenario. ILLUSTRATIVE fictional trace; evaluated for real by tools/asc_gate.py.
+apiVersion: agents.acme.example/v1alpha1
+kind: AgentScenario
+metadata:
+  name: inference_within_budget
+  labels:
+    category: benign
+    chapter: 12,13
+spec:
+  description: Single inference call with ample remaining budget.
+  expectedVerdict: ALLOW
+  context:
+    budgetStore:
+      status: available
+      usedTokens: 120000
+      usedUsd: 3.5
+      ageSeconds: 20
+  trace:
+    trace_id: tr-inference-ok
+    agent: platform-agent
+    evaluated_at: '2026-10-15T10:00:00Z'
+    calls:
+    - id: call-1
+      tool: inference.complete
+      via: gateway
+      args:
+        model: acme-small
+        max_tokens: 2000
+        prompt_ref: s3://acme-prompts/q-2

@@ -1,0 +1,8 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-drill5-policy-engine-down
+chapter: "14"
+scenario: "Drill 5 - policy engine down; nodes are empty but admission still blocks"
+policyEngine: down
+request: {tenant: inference, gpus: 1, gpuClass: nvidia-l4, initiator: human}
+snapshot: {status: available, tenantAllocated: {}, poolAllocated: 0}
+expected: BLOCK

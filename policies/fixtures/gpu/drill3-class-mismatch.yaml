@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-drill3-class-mismatch
+chapter: "14"
+scenario: "Drill 3 - manifest requests a GPU class absent from the pool"
+request: {tenant: inference, gpus: 1, gpuClass: nvidia-a100, initiator: human}
+snapshot: {status: available, tenantAllocated: {inference: 1}, poolAllocated: 1}
+expected: BLOCK

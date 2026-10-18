@@ -1,10 +1,24 @@
-# Chapter 13 — inference budget as admission policy
+# Chapter 13 — inference budget as admission policy.
+# ILLUSTRATIVE: Acme is fictional. Budgets, token caps and unit prices below are teaching
+# values, not measurements or real prices. Evaluated against fixtures by tools/check_policies.py
+# and by the agent gate (tools/asc_gate.py) for inference.complete tool calls.
 apiVersion: policy.acme.example/v1alpha1
 kind: InferenceBudgetPolicy
 metadata:
   name: ai-inference-budget
+  illustrative: true
 spec:
   principle: "Unknown ≠ Safe"
+  window: daily
+  # A budget read older than this is treated as unknown.
+  freshnessSecondsMax: 300
+  # Attribution-grade estimates (tokens x configured unit price), not the billing ledger.
+  costBasis: estimated
+  models:
+    acme-small:
+      costPerMillionTokensUsd: 0.40
+    acme-large:
+      costPerMillionTokensUsd: 6.00
   budgets:
     - team: payments-ml
       dailyTokens: 5000000
@@ -12,9 +26,17 @@ spec:
     - team: platform
       dailyTokens: 1000000
       dailyUsd: 80
+    - team: orders-assistant
+      dailyTokens: 2000000
+      dailyUsd: 40
   admission:
     whenBudgetUnknown: BLOCK
     whenBudgetExceeded: BLOCK
     whenBudgetStoreDown: BLOCK
+    whenSnapshotStale: BLOCK
+    whenTeamUnknown: BLOCK
+  exceptions:
+    # A temporary bump is a separate request that must be approved and time-bound.
+    temporaryIncrease: REQUIRE_APPROVAL
   evidence:
     requireBudgetSnapshot: true

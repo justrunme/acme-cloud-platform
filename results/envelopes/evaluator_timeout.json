@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": null,
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": null,
+  "scenario_id": "evaluator_timeout",
+  "trace_id": "tr-eval-timeout",
+  "verdict": "BLOCK",
+  "reason_code": "evaluator_timeout",
+  "reason": "onUnavailable=BLOCK: evaluator exceeded 1000 ms",
+  "acs_disposition": "DENY",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "fs.read",
+      "verdict": "BLOCK",
+      "reason_code": "evaluator_timeout",
+      "request_digest": null
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:58d35b8ebb9604757afe7fc073b9e6391d95d78ad76e481647ec1d9bba1fa7ec"
+}

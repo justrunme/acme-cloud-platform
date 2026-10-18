@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": "1.0.0",
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": "sha256:3b4754c19d12fb29fdcd7045c08eb40a8d24dd7a3e661c0d138777967b852575",
+  "scenario_id": "unknown_tool",
+  "trace_id": "tr-unknown-tool",
+  "verdict": "BLOCK",
+  "reason_code": "tool_not_in_catalog",
+  "reason": "call-1: tool 'shell.exec' is not in the approved catalog",
+  "acs_disposition": "DENY",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "shell.exec",
+      "verdict": "BLOCK",
+      "reason_code": "tool_not_in_catalog",
+      "request_digest": "sha256:17723b71c9cd7e17b8d8f964062b0a11167829594805fdac417874c47ceb5bb2"
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:5449e17b383c92b5226fc9212d3c8d9528439863292ab281e3e9f6d0b284a59e"
+}

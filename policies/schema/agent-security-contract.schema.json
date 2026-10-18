@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Acme AgentSecurityContract",
+  "type": "object",
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "agents.acme.example/v1alpha1"
+    },
+    "kind": {
+      "const": "AgentSecurityContract"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ]
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "defaultVerdict",
+        "onUnavailable",
+        "evaluatorTimeoutMs",
+        "catalog",
+        "requireGateway",
+        "agents",
+        "tools",
+        "rateLimits",
+        "approvals"
+      ],
+      "properties": {
+        "defaultVerdict": {
+          "type": "string",
+          "const": "BLOCK"
+        },
+        "onUnavailable": {
+          "type": "string",
+          "const": "BLOCK"
+        },
+        "evaluatorTimeoutMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "catalog": {
+          "type": "object",
+          "required": [
+            "ref",
+            "sha256"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          }
+        },
+        "requireGateway": {
+          "const": true
+        },
+        "agents": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "allowTools"
+            ],
+            "properties": {
+              "allowTools": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "globalDenyPatterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "regex"
+            ]
+          }
+        },
+        "tools": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "impact"
+            ],
+            "properties": {
+              "impact": {
+                "enum": [
+                  "low",
+                  "high"
+                ]
+              }
+            }
+          }
+        },
+        "rateLimits": {
+          "type": "object",
+          "required": [
+            "maxCallsPerTrace"
+          ],
+          "properties": {
+            "maxCallsPerTrace": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "perTool": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "approvals": {
+          "type": "object",
+          "required": [
+            "storeRef",
+            "bindTo"
+          ],
+          "properties": {
+            "bindTo": {
+              "const": "request_digest"
+            }
+          }
+        }
+      }
+    }
+  }
+}

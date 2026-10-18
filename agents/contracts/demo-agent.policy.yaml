@@ -1,38 +1,85 @@
-# Simplified agent capability contract (Chapter 12)
-# Inspired by https://github.com/justrunme/agent-security-contract
+# Agent Security Contract for the Acme platform agent (Chapter 12).
+# Evaluated by tools/asc_gate.py. Regression corpus: agents/scenarios/ (run: make corpus).
+# Vocabulary follows https://github.com/justrunme/agent-security-contract
+# (ALLOW / BLOCK / REQUIRE_APPROVAL). Acme is a fictional teaching estate.
 apiVersion: agents.acme.example/v1alpha1
 kind: AgentSecurityContract
 metadata:
   name: demo-platform-agent
+  version: "1.0.0"
 spec:
   principle: "Unknown ≠ Safe"
   defaultVerdict: BLOCK
+  # Evaluator timeout, transport error, or unreadable policy store => BLOCK.
+  onUnavailable: BLOCK
+  evaluatorTimeoutMs: 1000
+  # Runtime catalog bytes must match this digest exactly (tool poisoning => BLOCK).
+  catalog:
+    ref: agents/catalog/tools.json
+    sha256: "sha256:3b4754c19d12fb29fdcd7045c08eb40a8d24dd7a3e661c0d138777967b852575"
+  # Calls that did not pass through the evaluating gateway carry no envelope => BLOCK.
+  requireGateway: true
+  agents:
+    platform-agent:
+      allowTools:
+        - fs.read
+        - fs.write
+        - inventory.get
+        - http.fetch
+        - kubectl.apply
+        - kubectl.delete
+        - gitops.sync
+        - inference.complete
+  # Applied to every string argument value, after catalog input-schema validation.
+  globalDenyPatterns:
+    - id: shell_metacharacters
+      regex: "[;&|`$<>]"
+    - id: path_traversal
+      regex: "(^|/)\\.\\.(/|$)"
+    - id: cloud_metadata_endpoint
+      regex: "169\\.254\\.169\\.254|metadata\\.google\\.internal"
   tools:
-    - name: fs.read
-      allowPaths: ["/workspace/**"]
-      verdict: ALLOW
-    - name: fs.write
-      allowPaths: ["/workspace/out/**"]
-      verdict: ALLOW
-    - name: http.fetch
-      allowHosts: ["api.acme.example", "docs.acme.example"]
-      verdict: ALLOW
-    - name: kubectl.apply
-      environments: ["dev", "staging"]
-      verdict: REQUIRE_APPROVAL
-    - name: kubectl.apply
-      environments: ["production"]
-      highImpact: true
-      verdict: REQUIRE_APPROVAL
-    - name: kubectl.delete
-      highImpact: true
-      verdict: REQUIRE_APPROVAL
-  deny:
-    - unknown_tool
-    - path_traversal
-    - secrets_read
-    - ssrf_metadata
-    - mcp_tool_digest_mismatch
+    fs.read:
+      impact: low
+      pathGlobs: ["/workspace/**"]
+    fs.write:
+      impact: low
+      pathGlobs: ["/workspace/out/**"]
+    inventory.get:
+      impact: low
+      namespaces: [payments, orders, ai, sandbox]
+    http.fetch:
+      impact: low
+      allowHosts: [api.acme.example, docs.acme.example]
+      allowSchemes: [https]
+    kubectl.apply:
+      impact: high
+      namespaces: [payments, orders, ai, sandbox]
+      # Documented low-risk path: sandbox applies do not need a human.
+      approvalExemptNamespaces: [sandbox]
+    kubectl.delete:
+      impact: high
+      namespaces: [sandbox]
+    gitops.sync:
+      impact: high
+      applications: [payments, orders, inference]
+    inference.complete:
+      impact: low
+      models: [acme-small, acme-large]
+      budget:
+        policyRef: policies/inference-budget.yaml
+        team: platform
+  rateLimits:
+    maxCallsPerTrace: 8
+    perTool:
+      inference.complete: 4
+      kubectl.apply: 2
+      gitops.sync: 1
+  approvals:
+    storeRef: agents/approvals/approvals.json
+    # Approval is valid only for the exact request digest:
+    # sha256(canonical JSON of {agent, tool, args, policy_version}).
+    bindTo: request_digest
   evidence:
     requireEnvelope: true
     requirePolicySha256: true

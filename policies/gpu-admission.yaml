@@ -1,21 +1,34 @@
-# Chapter 14 — GPU admission / multi-tenant fairness
+# Chapter 14 — GPU admission / multi-tenant fairness.
+# ILLUSTRATIVE: Acme is fictional. Pool size, GPU class and tenant quotas are teaching values.
+# tools/check_policies.py evaluates admission decisions against fixtures in
+# policies/fixtures/gpu/. It does not schedule pods or measure latency; noisy-neighbor
+# and preemption drills need a real GPU pool and are not executed in this repository.
 apiVersion: policy.acme.example/v1alpha1
 kind: GPUAdmissionPolicy
 metadata:
   name: ai-gpu-admission
+  illustrative: true
 spec:
   principle: "Unknown ≠ Safe"
   clusters:
     - name: acme-gpu-a
       totalGpus: 8
+      gpuClasses: [nvidia-l4]
       reservedFor: ["inference"]
   tenants:
     - name: payments-ml
       maxGpus: 4
     - name: platform-agents
       maxGpus: 2
+    - name: inference
+      maxGpus: 4
   admission:
     whenQuotaUnknown: BLOCK
     whenFairnessCheckInconclusive: BLOCK
+    whenClassUnavailable: BLOCK
+    whenPolicyEngineDown: BLOCK
+    whenTenantUnknown: BLOCK
+    whenAutoscalerConflict: BLOCK
+    agentInitiatedMutation: REQUIRE_APPROVAL
   evidence:
     requireQuotaSnapshot: true

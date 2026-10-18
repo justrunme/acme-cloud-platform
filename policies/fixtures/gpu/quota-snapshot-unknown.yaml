@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-quota-snapshot-unknown
+chapter: "14"
+scenario: "Quota snapshot missing; capacity is unknown"
+request: {tenant: inference, gpus: 1, gpuClass: nvidia-l4, initiator: human}
+snapshot: {status: unknown}
+expected: BLOCK

@@ -4,7 +4,9 @@
   "metadata": {
     "id": "RP-0017",
     "completedAt": "2026-09-02T11:04:00Z",
-    "actor": "sre-oncall@acme.example"
+    "actor": "sre-oncall@acme.example",
+    "illustrative": true,
+    "illustrativeNote": "Fictional Acme teaching data for the book. Timestamps, row counts, RTO values and outcomes are illustrative, not measurements."
   },
   "scope": {
     "namespace": "payments",

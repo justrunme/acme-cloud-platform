@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-within-quota
+chapter: "14"
+scenario: "Control - tenant within quota on an available class"
+request: {tenant: payments-ml, gpus: 1, gpuClass: nvidia-l4, initiator: human}
+snapshot: {status: available, tenantAllocated: {payments-ml: 2, inference: 1}, poolAllocated: 3}
+expected: ALLOW

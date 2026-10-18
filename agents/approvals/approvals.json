@@ -1,0 +1,23 @@
+{
+  "_comment": "ILLUSTRATIVE approval store for the fictional Acme estate. Each approval is valid only for the request digest it names: sha256 over canonical JSON of {agent, tool, args, policy_version}. Compute one with: python -m tools.asc_gate digest <scenario> --call <id>.",
+  "approvals": [
+    {
+      "approval_id": "APR-0001",
+      "request_digest": "sha256:d33006c9a8006201b3381443263cc6ac096e3c86c94933ef60061317bae66b40",
+      "tool": "kubectl.apply",
+      "summary": "payments image 1.8.3 to production, approved after CHG-0043 review (request digest of the CHG-0043 call)",
+      "approver": "sre-oncall (fictional)",
+      "issued_at": "2026-10-15T09:40:00Z",
+      "expires_at": "2026-10-15T13:40:00Z"
+    },
+    {
+      "approval_id": "APR-0002",
+      "request_digest": "sha256:e60daeacb8387ee55e5084ff1199f89a25468a844389e3716c15121ee4ac3c3b",
+      "tool": "gitops.sync",
+      "summary": "orders sync to v2.1.1",
+      "approver": "sre-oncall (fictional)",
+      "issued_at": "2026-10-14T08:00:00Z",
+      "expires_at": "2026-10-14T12:00:00Z"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+# The MCP tool servers accept traffic only from the evaluating gateway, never from the agent
+# directly. This manifest is reviewed, not applied: no cluster runs in this repository. The
+# corpus scenario direct_tool_endpoint_no_gateway models the same rule at the gate.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mcp-tools-only-from-gateway
+  namespace: ai
+spec:
+  podSelector:
+    matchLabels:
+      acme.example/role: mcp-tool-server
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mcp-gateway

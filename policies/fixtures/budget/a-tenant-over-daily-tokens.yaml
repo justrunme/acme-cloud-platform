@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: budget-a-tenant-over-daily-tokens
+chapter: "13"
+scenario: "A - tenant at 100% of daily tokens sends one more request"
+request: {team: orders-assistant, model: acme-small, tokens: 800}
+snapshot: {status: available, usedTokens: 2000000, usedUsd: 0.80, ageSeconds: 40}
+expected: BLOCK

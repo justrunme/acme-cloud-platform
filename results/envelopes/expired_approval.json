@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": "1.0.0",
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": "sha256:3b4754c19d12fb29fdcd7045c08eb40a8d24dd7a3e661c0d138777967b852575",
+  "scenario_id": "expired_approval",
+  "trace_id": "tr-expired-approval",
+  "verdict": "BLOCK",
+  "reason_code": "approval_expired",
+  "reason": "call-1: approval APR-0002 expired at 2026-10-14T12:00:00Z",
+  "acs_disposition": "DENY",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "gitops.sync",
+      "verdict": "BLOCK",
+      "reason_code": "approval_expired",
+      "request_digest": "sha256:e60daeacb8387ee55e5084ff1199f89a25468a844389e3716c15121ee4ac3c3b"
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:049d818ceabfbd458bf7c41f8409f39de1050496b938941077a4514e20631756"
+}

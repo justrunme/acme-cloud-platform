@@ -1,0 +1,13 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: budget-e-unit-price-change
+chapter: "13"
+scenario: "E - rehearse a unit price change by replaying one illustrative day of traffic"
+kind: price-rehearsal
+change: {model: acme-large, costPerMillionTokensUsd: 30.00}
+traffic:
+  - {team: payments-ml, model: acme-large, tokens: 3000000}
+  - {team: orders-assistant, model: acme-large, tokens: 1500000}
+  - {team: platform, model: acme-small, tokens: 400000}
+expected:
+  current: {block: 0}
+  proposed: {block: 1, blockedTeams: [orders-assistant]}

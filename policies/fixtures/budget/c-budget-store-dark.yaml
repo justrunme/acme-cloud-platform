@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: budget-c-budget-store-dark
+chapter: "13"
+scenario: "C - quota store unreachable"
+request: {team: payments-ml, model: acme-large, tokens: 1000}
+snapshot: {status: unavailable}
+expected: BLOCK

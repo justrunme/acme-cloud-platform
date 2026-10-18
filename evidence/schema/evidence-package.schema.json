@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://acme.example/schemas/evidence-package.schema.json",
   "title": "Acme Evidence Package",
-  "description": "Unified proof artifact for Prove It Before Production. Aligns vocabulary with architecture-rehearsal ImpactReport (approve|warn|block|unknown), agent-security-contract Evidence Envelope (ALLOW|BLOCK|REQUIRE_APPROVAL), and Recovery Contract (PROVED|UNPROVED).",
+  "description": "Unified proof artifact for Prove It Before Production. Aligns vocabulary with architecture-rehearsal ImpactReport (approve|warn|block|unknown), agent-security-contract Evidence Envelope (ALLOW|BLOCK|REQUIRE_APPROVAL), and Recovery Contract (PROVED|UNPROVED). Every digest field is a real sha256 that scripts/validate-evidence.sh recomputes; see evidence/README.md for what each digest covers.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -27,14 +27,24 @@
     "metadata": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "createdAt", "actor"],
+      "required": [
+        "id",
+        "createdAt",
+        "actor",
+        "illustrative"
+      ],
       "properties": {
         "id": {
           "type": "string",
           "pattern": "^CHG-[0-9]{4,}$"
         },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "actor": { "type": "string" },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "actor": {
+          "type": "string"
+        },
         "traceId": {
           "type": "string",
           "description": "Correlation id (ASC trace_id analogue)"
@@ -45,19 +55,45 @@
         },
         "labels": {
           "type": "object",
-          "additionalProperties": { "type": "string" }
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "illustrative": {
+          "type": "boolean",
+          "description": "true for fictional teaching scenarios. Actors, timestamps, commitSha and outcomes are then not measurements."
+        },
+        "illustrativeNote": {
+          "type": "string"
         }
       }
     },
     "change": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["summary", "targets", "intent"],
+      "required": [
+        "summary",
+        "targets",
+        "intent",
+        "changeDigest"
+      ],
       "properties": {
-        "summary": { "type": "string" },
+        "summary": {
+          "type": "string"
+        },
         "intent": {
           "type": "string",
-          "enum": ["create", "update", "upgrade", "delete", "rollback", "restore", "policy", "agent_tool", "other"]
+          "enum": [
+            "create",
+            "update",
+            "upgrade",
+            "delete",
+            "rollback",
+            "restore",
+            "policy",
+            "agent_tool",
+            "other"
+          ]
         },
         "targets": {
           "type": "array",
@@ -65,33 +101,52 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["kind", "name"],
+            "required": [
+              "kind",
+              "name"
+            ],
             "properties": {
-              "kind": { "type": "string" },
-              "name": { "type": "string" },
-              "namespace": { "type": "string" }
+              "kind": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "namespace": {
+                "type": "string"
+              }
             }
           }
         },
         "naiveSignals": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "changeDigest": {
           "type": "string",
-          "description": "Content digest of the proposed change (architecture-rehearsal changeDigest analogue)"
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "description": "sha256 over canonical JSON of the change object without changeDigest"
         }
       }
     },
     "reconstruction": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["graphRef", "facts"],
+      "required": [
+        "graphRef",
+        "facts",
+        "baselineDigest"
+      ],
       "properties": {
-        "graphRef": { "type": "string" },
+        "graphRef": {
+          "type": "string"
+        },
         "baselineDigest": {
           "type": "string",
-          "description": "Digest of reconstructed baseline snapshot"
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "description": "sha256 of the bytes of the file named by graphRef"
         },
         "facts": {
           "type": "array",
@@ -99,86 +154,161 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["id", "statement", "source"],
+            "required": [
+              "id",
+              "statement",
+              "source"
+            ],
             "properties": {
-              "id": { "type": "string" },
-              "statement": { "type": "string" },
-              "source": { "type": "string" },
+              "id": {
+                "type": "string"
+              },
+              "statement": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
               "confidence": {
                 "type": "string",
-                "enum": ["observed", "inferred", "assumed"]
+                "enum": [
+                  "observed",
+                  "inferred",
+                  "assumed"
+                ]
               }
             }
           }
         },
         "unknowns": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "rehearsal": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "result", "findings"],
+      "required": [
+        "kind",
+        "result",
+        "findings"
+      ],
       "properties": {
         "kind": {
           "type": "string",
-          "enum": ["architecture", "restore", "rollback", "agent", "policy", "budget", "gpu", "other"]
+          "enum": [
+            "architecture",
+            "restore",
+            "rollback",
+            "agent",
+            "policy",
+            "budget",
+            "gpu",
+            "other"
+          ]
         },
-        "scenarioRef": { "type": "string" },
+        "scenarioRef": {
+          "type": "string"
+        },
         "result": {
           "type": "string",
-          "enum": ["pass", "fail", "inconclusive"]
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
         },
         "risk": {
           "type": "string",
-          "enum": ["low", "medium", "high", "critical", "unknown"]
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical",
+            "unknown"
+          ]
         },
         "findings": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "semanticDigest": {
           "type": "string",
-          "description": "architecture-rehearsal semanticDigest analogue"
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "description": "sha256 of the bytes of the file named by scenarioRef"
         }
       }
     },
     "verdict": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["decision", "reason", "principle"],
+      "required": [
+        "decision",
+        "reason",
+        "principle",
+        "policyRef",
+        "policySha256"
+      ],
       "properties": {
         "decision": {
           "type": "string",
-          "enum": ["ALLOW", "BLOCK", "REQUIRE_APPROVAL"],
+          "enum": [
+            "ALLOW",
+            "BLOCK",
+            "REQUIRE_APPROVAL"
+          ],
           "description": "Book/ASC vocabulary. Map from architecture-rehearsal: approve→ALLOW, warn→REQUIRE_APPROVAL, block|unknown→BLOCK when unknownAsBlock."
         },
         "rehearsalDecision": {
           "type": "string",
-          "enum": ["approve", "warn", "block", "unknown"],
+          "enum": [
+            "approve",
+            "warn",
+            "block",
+            "unknown"
+          ],
           "description": "Optional raw architecture-rehearsal decision before mapping"
         },
         "recoveryVerdict": {
           "type": "string",
-          "enum": ["PROVED", "UNPROVED"],
+          "enum": [
+            "PROVED",
+            "UNPROVED"
+          ],
           "description": "Optional Recovery Contract verdict when rehearsal.kind=restore"
         },
-        "reason": { "type": "string" },
-        "principle": { "type": "string" },
+        "reason": {
+          "type": "string"
+        },
+        "principle": {
+          "type": "string"
+        },
         "criteria": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
-        "policyRef": { "type": "string" },
+        "policyRef": {
+          "type": "string"
+        },
         "policySha256": {
           "type": "string",
-          "pattern": "^sha256:[a-f0-9]{64}$"
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "description": "sha256 of the bytes of the file named by policyRef"
         },
         "acsDisposition": {
           "type": "string",
-          "enum": ["ALLOW", "DENY", "ASK"],
+          "enum": [
+            "ALLOW",
+            "DENY",
+            "ASK"
+          ],
           "description": "OWASP ACS mapping when change is an agent tool call"
         }
       }
@@ -186,7 +316,10 @@
     "evidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["artifacts"],
+      "required": [
+        "artifacts",
+        "envelopeSha256"
+      ],
       "properties": {
         "artifacts": {
           "type": "array",
@@ -194,19 +327,34 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["path", "description"],
+            "required": [
+              "path",
+              "description",
+              "sha256"
+            ],
             "properties": {
-              "path": { "type": "string" },
-              "description": { "type": "string" },
-              "sha256": { "type": "string" }
+              "path": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$",
+                "description": "sha256 of the artifact file bytes"
+              }
             }
           }
         },
-        "retentionDays": { "type": "integer", "minimum": 1 },
+        "retentionDays": {
+          "type": "integer",
+          "minimum": 1
+        },
         "envelopeSha256": {
           "type": "string",
           "pattern": "^sha256:[a-f0-9]{64}$",
-          "description": "Integrity hash of canonical package body (ASC envelope_sha256 analogue)"
+          "description": "sha256 over canonical JSON of the whole package with evidence.envelopeSha256 removed (ASC envelope_sha256 analogue)"
         },
         "generatedDocsHint": {
           "type": "string",
@@ -221,7 +369,9 @@
       "properties": {
         "inspiredBy": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Acme InferenceBudgetPolicy",
+  "type": "object",
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "policy.acme.example/v1alpha1"
+    },
+    "kind": {
+      "const": "InferenceBudgetPolicy"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "name",
+        "illustrative"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "illustrative": {
+          "const": true
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "principle",
+        "window",
+        "freshnessSecondsMax",
+        "models",
+        "budgets",
+        "admission"
+      ],
+      "properties": {
+        "principle": {
+          "type": "string"
+        },
+        "window": {
+          "enum": [
+            "hourly",
+            "daily",
+            "monthly"
+          ]
+        },
+        "freshnessSecondsMax": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "costBasis": {
+          "enum": [
+            "estimated",
+            "ledger"
+          ]
+        },
+        "models": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "costPerMillionTokensUsd"
+            ],
+            "properties": {
+              "costPerMillionTokensUsd": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
+          }
+        },
+        "budgets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "team",
+              "dailyTokens",
+              "dailyUsd"
+            ],
+            "properties": {
+              "team": {
+                "type": "string"
+              },
+              "dailyTokens": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "dailyUsd": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "admission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "whenBudgetUnknown",
+            "whenBudgetExceeded",
+            "whenBudgetStoreDown",
+            "whenSnapshotStale",
+            "whenTeamUnknown"
+          ],
+          "properties": {
+            "whenBudgetUnknown": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenBudgetExceeded": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenBudgetStoreDown": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenSnapshotStale": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenTeamUnknown": {
+              "type": "string",
+              "const": "BLOCK"
+            }
+          }
+        },
+        "exceptions": {
+          "type": "object"
+        },
+        "evidence": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
