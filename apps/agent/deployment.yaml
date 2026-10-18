@@ -1,0 +1,28 @@
+# Placeholder for Part IV — AI agent with tool access to infrastructure
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: platform-agent
+  namespace: ai
+  labels:
+    app: platform-agent
+    acme.example/threat-model: agent-mcp-tool-infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: platform-agent
+  template:
+    metadata:
+      labels:
+        app: platform-agent
+    spec:
+      serviceAccountName: platform-agent
+      containers:
+        - name: agent
+          image: acme.example/platform-agent:0.1.0
+          env:
+            - name: MCP_ENDPOINT
+              value: http://mcp.ai.svc
+            - name: DEFAULT_VERDICT
+              value: REQUIRE_APPROVAL

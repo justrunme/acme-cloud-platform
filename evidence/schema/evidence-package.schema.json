@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://acme.example/schemas/evidence-package.schema.json",
+  "title": "Acme Evidence Package",
+  "description": "Unified proof artifact for Prove It Before Production. Aligns vocabulary with architecture-rehearsal ImpactReport (approve|warn|block|unknown), agent-security-contract Evidence Envelope (ALLOW|BLOCK|REQUIRE_APPROVAL), and Recovery Contract (PROVED|UNPROVED).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "change",
+    "reconstruction",
+    "rehearsal",
+    "verdict",
+    "evidence"
+  ],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "evidence.acme.example/v1alpha1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "EvidencePackage"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "createdAt", "actor"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CHG-[0-9]{4,}$"
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "actor": { "type": "string" },
+        "traceId": {
+          "type": "string",
+          "description": "Correlation id (ASC trace_id analogue)"
+        },
+        "commitSha": {
+          "type": "string",
+          "description": "Git commit that proposed the change"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "targets", "intent"],
+      "properties": {
+        "summary": { "type": "string" },
+        "intent": {
+          "type": "string",
+          "enum": ["create", "update", "upgrade", "delete", "rollback", "restore", "policy", "agent_tool", "other"]
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "name"],
+            "properties": {
+              "kind": { "type": "string" },
+              "name": { "type": "string" },
+              "namespace": { "type": "string" }
+            }
+          }
+        },
+        "naiveSignals": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "changeDigest": {
+          "type": "string",
+          "description": "Content digest of the proposed change (architecture-rehearsal changeDigest analogue)"
+        }
+      }
+    },
+    "reconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["graphRef", "facts"],
+      "properties": {
+        "graphRef": { "type": "string" },
+        "baselineDigest": {
+          "type": "string",
+          "description": "Digest of reconstructed baseline snapshot"
+        },
+        "facts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "statement", "source"],
+            "properties": {
+              "id": { "type": "string" },
+              "statement": { "type": "string" },
+              "source": { "type": "string" },
+              "confidence": {
+                "type": "string",
+                "enum": ["observed", "inferred", "assumed"]
+              }
+            }
+          }
+        },
+        "unknowns": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "rehearsal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "result", "findings"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["architecture", "restore", "rollback", "agent", "policy", "budget", "gpu", "other"]
+        },
+        "scenarioRef": { "type": "string" },
+        "result": {
+          "type": "string",
+          "enum": ["pass", "fail", "inconclusive"]
+        },
+        "risk": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical", "unknown"]
+        },
+        "findings": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "semanticDigest": {
+          "type": "string",
+          "description": "architecture-rehearsal semanticDigest analogue"
+        }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "reason", "principle"],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": ["ALLOW", "BLOCK", "REQUIRE_APPROVAL"],
+          "description": "Book/ASC vocabulary. Map from architecture-rehearsal: approve→ALLOW, warn→REQUIRE_APPROVAL, block|unknown→BLOCK when unknownAsBlock."
+        },
+        "rehearsalDecision": {
+          "type": "string",
+          "enum": ["approve", "warn", "block", "unknown"],
+          "description": "Optional raw architecture-rehearsal decision before mapping"
+        },
+        "recoveryVerdict": {
+          "type": "string",
+          "enum": ["PROVED", "UNPROVED"],
+          "description": "Optional Recovery Contract verdict when rehearsal.kind=restore"
+        },
+        "reason": { "type": "string" },
+        "principle": { "type": "string" },
+        "criteria": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "policyRef": { "type": "string" },
+        "policySha256": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "acsDisposition": {
+          "type": "string",
+          "enum": ["ALLOW", "DENY", "ASK"],
+          "description": "OWASP ACS mapping when change is an agent tool call"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifacts"],
+      "properties": {
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "description"],
+            "properties": {
+              "path": { "type": "string" },
+              "description": { "type": "string" },
+              "sha256": { "type": "string" }
+            }
+          }
+        },
+        "retentionDays": { "type": "integer", "minimum": 1 },
+        "envelopeSha256": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$",
+          "description": "Integrity hash of canonical package body (ASC envelope_sha256 analogue)"
+        },
+        "generatedDocsHint": {
+          "type": "string",
+          "description": "Claims in human docs must be generated from this package — never hand-typed metrics"
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "description": "Optional pointers to public reference implementations",
+      "additionalProperties": false,
+      "properties": {
+        "inspiredBy": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

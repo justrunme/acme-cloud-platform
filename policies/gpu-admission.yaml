@@ -1,0 +1,21 @@
+# Chapter 14 — GPU admission / multi-tenant fairness
+apiVersion: policy.acme.example/v1alpha1
+kind: GPUAdmissionPolicy
+metadata:
+  name: ai-gpu-admission
+spec:
+  principle: "Unknown ≠ Safe"
+  clusters:
+    - name: acme-gpu-a
+      totalGpus: 8
+      reservedFor: ["inference"]
+  tenants:
+    - name: payments-ml
+      maxGpus: 4
+    - name: platform-agents
+      maxGpus: 2
+  admission:
+    whenQuotaUnknown: BLOCK
+    whenFairnessCheckInconclusive: BLOCK
+  evidence:
+    requireQuotaSnapshot: true

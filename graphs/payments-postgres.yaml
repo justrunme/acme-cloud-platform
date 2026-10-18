@@ -1,0 +1,65 @@
+# Dependency graph sketch for Acme payments ↔ postgres
+# Used by CHG-0042 reconstruction (Chapter 1 / 6)
+apiVersion: graphs.acme.example/v1alpha1
+kind: DependencyGraph
+metadata:
+  name: payments-postgres
+  labels:
+    chapter: "1"
+spec:
+  nodes:
+    - id: payments
+      kind: Deployment
+      namespace: payments
+      name: payments
+    - id: orders
+      kind: Deployment
+      namespace: orders
+      name: orders
+    - id: postgres
+      kind: StatefulSet
+      namespace: payments
+      name: postgres
+    - id: pvc-postgres-data
+      kind: PersistentVolumeClaim
+      namespace: payments
+      name: postgres-data
+    - id: sc-fast-ssd-v1
+      kind: StorageClass
+      name: fast-ssd-v1
+    - id: restore-contract-rp0017
+      kind: RestorePointContract
+      name: RP-0017
+  edges:
+    - from: payments
+      to: postgres
+      relation: reads_writes
+      criticality: high
+    - from: orders
+      to: postgres
+      relation: reads
+      criticality: medium
+      note: reporting queries only
+    - from: postgres
+      to: pvc-postgres-data
+      relation: binds
+      criticality: high
+    - from: pvc-postgres-data
+      to: sc-fast-ssd-v1
+      relation: provisioned_by
+      criticality: high
+    - from: restore-contract-rp0017
+      to: sc-fast-ssd-v1
+      relation: assumes
+      criticality: high
+      note: Last passing restore drill assumes this StorageClass
+  blastRadiusFor:
+    change: CHG-0042
+    directlyAffected:
+      - postgres
+      - pvc-postgres-data
+      - sc-fast-ssd-v1
+    transitivelyAffected:
+      - payments
+      - orders
+      - restore-contract-rp0017

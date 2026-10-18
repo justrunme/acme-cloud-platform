@@ -1,0 +1,36 @@
+{
+  "apiVersion": "restore.acme.example/v1alpha1",
+  "kind": "RestorePointSummary",
+  "metadata": {
+    "id": "RP-0018",
+    "completedAt": "2026-10-15T16:38:00Z",
+    "actor": "sre-oncall@acme.example"
+  },
+  "scope": {
+    "namespace": "payments",
+    "database": "postgres",
+    "storageClass": "fast-ssd-v1",
+    "objectStore": "payments-objects"
+  },
+  "assertions": [
+    {
+      "id": "A1",
+      "statement": "Isolated restore namespace became Ready within RTO",
+      "result": "pass"
+    },
+    {
+      "id": "A2",
+      "statement": "Object keys referenced by restored rows exist with matching sha256",
+      "result": "pass"
+    },
+    {
+      "id": "A3",
+      "statement": "payments checkout probe succeeded",
+      "result": "pass"
+    }
+  ],
+  "verdict": {
+    "decision": "PROVED",
+    "rtoSeconds": 1120
+  }
+}

@@ -1,0 +1,25 @@
+# Placeholder for Part IV — GPU / inference admission chapters
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference
+  namespace: ai
+  labels:
+    app: inference
+    acme.example/gpu: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inference
+  template:
+    metadata:
+      labels:
+        app: inference
+    spec:
+      containers:
+        - name: inference
+          image: acme.example/inference:0.3.0
+          resources:
+            limits:
+              nvidia.com/gpu: "1"

@@ -1,0 +1,37 @@
+# Fail-closed policy sketch — Chapter 7
+# Unknown ≠ Safe
+# REQUIRE_APPROVAL never alone authorizes APPLY.
+apiVersion: policy.acme.example/v1alpha1
+kind: ChangeAdmissionPolicy
+metadata:
+  name: fail-closed-data-plane
+spec:
+  principle: "Unknown ≠ Safe"
+  applyRequires:
+    verdict: ALLOW
+  match:
+    riskClasses: ["data-plane", "recovery-affecting"]
+    intents: ["upgrade", "delete", "restore"]
+    targets:
+      kinds: ["StatefulSet", "PersistentVolumeClaim", "StorageClass"]
+  require:
+    - evidencePackage: true
+    - reconstruction.graphRef: true
+    - rehearsal.result: ["pass"]
+  holdWhen:
+    - verdict.decision: REQUIRE_APPROVAL
+      note: "Hold only. Bind approval to request digest, then re-evaluate to ALLOW or BLOCK. APPLY stays unauthorized."
+  denyWhen:
+    - reconstruction.unknowns is non-empty AND affects recoveryOrRollback
+    - rehearsal.result in ["fail", "inconclusive"]
+    - recovery path assumed by change lacks a passing RestorePoint on the *target* configuration
+  onDeny:
+    decision: BLOCK
+    message: "Insufficient evidence that this change is safe. Production is not the rehearsal stage."
+  breakGlass:
+    allowed: true
+    requires:
+      - dual_control_approval
+      - time_bounded_ticket
+      - post_incident_evidence_backfill
+    note: "Emergency paths are explicit exceptions, not soft-allow."

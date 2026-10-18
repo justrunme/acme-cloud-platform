@@ -1,0 +1,45 @@
+{
+  "apiVersion": "restore.acme.example/v1alpha1",
+  "kind": "RestorePointSummary",
+  "metadata": {
+    "id": "RP-0017",
+    "completedAt": "2026-09-02T11:04:00Z",
+    "actor": "sre-oncall@acme.example"
+  },
+  "scope": {
+    "namespace": "payments",
+    "database": "postgres",
+    "storageClass": "fast-ssd-v1",
+    "backupMethod": "snapshot-plus-logical-verify"
+  },
+  "assertions": [
+    {
+      "id": "A1",
+      "statement": "Snapshot restore onto a new PVC with StorageClass fast-ssd-v1 reaches Ready",
+      "result": "pass"
+    },
+    {
+      "id": "A2",
+      "statement": "payments can complete a checkout against restored data within RTO 30m",
+      "result": "pass"
+    },
+    {
+      "id": "A3",
+      "statement": "Row counts and checksum sample match pre-restore baseline",
+      "result": "pass"
+    }
+  ],
+  "assumptions": [
+    "Volume binding mode Immediate on fast-ssd-v1",
+    "Retain reclaim policy",
+    "Restore Job image restore-verify:1.4.2"
+  ],
+  "verdict": {
+    "decision": "PASS",
+    "note": "Valid only for storageClass=fast-ssd-v1. Not transferable to fast-ssd-v2 without a new drill."
+  },
+  "artifacts": [
+    "restore/RP-0017/job-logs.txt",
+    "restore/RP-0017/checksums.json"
+  ]
+}

@@ -1,0 +1,20 @@
+apiVersion: rehearsal.acme.example/v1alpha1
+kind: ArchitectureRehearsal
+metadata:
+  name: chg-0045-evidence-store-down
+spec:
+  change:
+    summary: Scale orders while evidence-store is unavailable
+  pretenses:
+    - "Change is only a replica count"
+  steps:
+    - name: check-evidence-store
+      result: unavailable
+    - name: attempt-package-write
+      result: fail
+  outcome:
+    result: inconclusive
+    recommendedVerdict: BLOCK
+    because:
+      - Cannot retain evidence
+      - unknownAsBlock defaults true

@@ -1,0 +1,13 @@
+apiVersion: restore.acme.example/v1alpha1
+kind: RestoreDrill
+metadata:
+  name: rp-0018
+spec:
+  contractRef: restore/contracts/recovery-contract.yaml
+  restorePoint: RP-0018
+  change: CHG-0044
+  steps:
+    - PROTECT
+    - VALIDATE
+    - RESTORE
+    - PROVE

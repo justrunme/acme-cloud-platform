@@ -1,0 +1,12 @@
+# Proposed target in CHG-0042 — NOT covered by RestorePoint RP-0017
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd-v2
+  labels:
+    acme.example/restore-contract: ""
+    acme.example/status: proposed
+provisioner: acme.example/csi-fast-ssd-v2
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true

@@ -1,0 +1,91 @@
+{
+  "apiVersion": "evidence.acme.example/v1alpha1",
+  "kind": "EvidencePackage",
+  "metadata": {
+    "id": "CHG-0044",
+    "createdAt": "2026-10-15T16:40:00Z",
+    "actor": "sre-oncall@acme.example",
+    "traceId": "tr-restore-drill-0044",
+    "commitSha": "demo0000000000000000000000000000000044",
+    "labels": {
+      "chapter": "8",
+      "service": "payments"
+    }
+  },
+  "change": {
+    "summary": "Quarterly RestorePoint drill for payments postgres + object store linkage",
+    "intent": "restore",
+    "targets": [
+      {
+        "kind": "StatefulSet",
+        "name": "postgres",
+        "namespace": "payments"
+      }
+    ],
+    "naiveSignals": [
+      "Backup Job exit code 0 every night this month"
+    ],
+    "changeDigest": "sha256:demo-change-chg0044-restore-drill"
+  },
+  "reconstruction": {
+    "graphRef": "graphs/payments-postgres.yaml",
+    "baselineDigest": "sha256:demo-baseline-before-restore-0044",
+    "facts": [
+      {
+        "id": "F1",
+        "statement": "payments rows reference object keys in the object store with sha256 + generation",
+        "source": "restore/contracts/recovery-contract.yaml",
+        "confidence": "observed"
+      },
+      {
+        "id": "F2",
+        "statement": "Last nightly backup Job succeeded",
+        "source": "restore/RP-0018/backup-job-status.json",
+        "confidence": "observed"
+      }
+    ],
+    "unknowns": []
+  },
+  "rehearsal": {
+    "kind": "restore",
+    "scenarioRef": "restore/RP-0018/drill.yaml",
+    "result": "pass",
+    "risk": "high",
+    "findings": [
+      "Isolated namespace restore completed within RTO",
+      "Cross-component consistency checks passed",
+      "payments checkout probe succeeded against restored data"
+    ]
+  },
+  "verdict": {
+    "decision": "ALLOW",
+    "recoveryVerdict": "PROVED",
+    "reason": "RestorePoint RP-0018 met the Recovery Contract: isolated restore, data verification, and cross-component consistency within RTO.",
+    "principle": "Unknown ≠ Safe",
+    "criteria": [
+      "Backup success alone is insufficient",
+      "PROVED requires application-level verification"
+    ],
+    "policyRef": "restore/contracts/recovery-contract.yaml",
+    "policySha256": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  },
+  "evidence": {
+    "retentionDays": 365,
+    "envelopeSha256": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "artifacts": [
+      {
+        "path": "restore/contracts/recovery-contract.yaml",
+        "description": "Recovery Contract requirements"
+      },
+      {
+        "path": "restore/RP-0018/summary.json",
+        "description": "Drill summary with PROVED verdict"
+      }
+    ]
+  },
+  "lineage": {
+    "inspiredBy": [
+      "https://github.com/justrunme/kanister-backup-restore"
+    ]
+  }
+}

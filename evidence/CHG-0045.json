@@ -1,0 +1,89 @@
+{
+  "apiVersion": "evidence.acme.example/v1alpha1",
+  "kind": "EvidencePackage",
+  "metadata": {
+    "id": "CHG-0045",
+    "createdAt": "2026-10-16T08:00:00Z",
+    "actor": "engineer@acme.example",
+    "traceId": "tr-evidence-store-down-0045",
+    "commitSha": "demo0000000000000000000000000000000045",
+    "labels": {
+      "chapter": "10",
+      "service": "orders"
+    }
+  },
+  "change": {
+    "summary": "Scale orders Deployment 2 → 4 replicas",
+    "intent": "update",
+    "targets": [
+      {
+        "kind": "Deployment",
+        "name": "orders",
+        "namespace": "orders"
+      }
+    ],
+    "naiveSignals": [
+      "Change is tiny",
+      "Business wants more capacity now"
+    ],
+    "changeDigest": "sha256:demo-change-chg0045-scale-orders"
+  },
+  "reconstruction": {
+    "graphRef": "graphs/payments-postgres.yaml",
+    "facts": [
+      {
+        "id": "F1",
+        "statement": "Evidence store endpoint returned unavailable during package write",
+        "source": "policies/evidence-system-availability.yaml",
+        "confidence": "observed"
+      }
+    ],
+    "unknowns": [
+      "Whether a durable evidence package can be retained for this change",
+      "Whether prior RestorePoint proofs are readable during the outage window"
+    ]
+  },
+  "rehearsal": {
+    "kind": "policy",
+    "scenarioRef": "rehearsals/CHG-0045-evidence-store-down.yaml",
+    "result": "inconclusive",
+    "risk": "unknown",
+    "findings": [
+      "Evidence system dependency failed",
+      "Cannot retain proof ⇒ cannot claim safety"
+    ]
+  },
+  "verdict": {
+    "decision": "BLOCK",
+    "rehearsalDecision": "unknown",
+    "reason": "Evidence store unavailable for a production mutation in a risk class that requires retained proof. Emergency scale requires explicit break-glass (dual control, time bound, evidence backfill)—not soft-allow.",
+    "principle": "Unknown ≠ Safe",
+    "criteria": [
+      "Evidence package must be writable and readable for this risk class",
+      "unknownAsBlock defaults to true for matched risk classes",
+      "Break-glass is explicit, attributable, and time-bounded"
+    ],
+    "policyRef": "policies/evidence-system-availability.yaml",
+    "policySha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "evidence": {
+    "retentionDays": 365,
+    "envelopeSha256": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "artifacts": [
+      {
+        "path": "policies/evidence-system-availability.yaml",
+        "description": "Fail-closed rules when evidence dependencies are down"
+      },
+      {
+        "path": "rehearsals/CHG-0045-evidence-store-down.yaml",
+        "description": "Rehearsal of evidence-plane outage"
+      }
+    ]
+  },
+  "lineage": {
+    "inspiredBy": [
+      "https://github.com/justrunme/architecture-rehearsal",
+      "https://github.com/justrunme/agent-security-contract"
+    ]
+  }
+}

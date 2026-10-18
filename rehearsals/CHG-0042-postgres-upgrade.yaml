@@ -1,0 +1,41 @@
+# Architecture rehearsal for CHG-0042
+# Simulate the Postgres upgrade before production apply.
+apiVersion: rehearsal.acme.example/v1alpha1
+kind: ArchitectureRehearsal
+metadata:
+  name: chg-0042-postgres-upgrade
+  labels:
+    change: CHG-0042
+spec:
+  change:
+    summary: Upgrade PostgreSQL 15 → 16; PVC reprovisions onto fast-ssd-v2
+  pretenses:
+    - "terraform plan is clean"
+    - "CI is green"
+    - "staging applied a similar module"
+  steps:
+    - name: reconstruct
+      uses: graphs/payments-postgres.yaml
+      expect: chain payments → postgres → PVC → StorageClass
+    - name: simulate-storage-class-change
+      from: fast-ssd-v1
+      to: fast-ssd-v2
+      note: CSI driver and binding semantics differ
+    - name: check-restore-contract
+      contract: RP-0017
+      question: Does the last passing RestorePoint still hold on fast-ssd-v2?
+      answer: unknown
+    - name: check-staging-parity
+      question: Does staging include fast-ssd-v2 and the same restore tooling path?
+      answer: no
+  outcome:
+    result: fail
+    because:
+      - Tested recovery path would be invalidated
+      - Unknown restore validity on target StorageClass
+      - Staging did not rehearse this branch
+    recommendedVerdict: BLOCK
+    unblockWhen:
+      - RestorePoint drill passes on fast-ssd-v2 with payments data shape
+      - Evidence package references new RestorePoint id
+      - Graph updated to sc-fast-ssd-v2 with matching restore edge

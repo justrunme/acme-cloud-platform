@@ -1,0 +1,20 @@
+# Chapter 13 — inference budget as admission policy
+apiVersion: policy.acme.example/v1alpha1
+kind: InferenceBudgetPolicy
+metadata:
+  name: ai-inference-budget
+spec:
+  principle: "Unknown ≠ Safe"
+  budgets:
+    - team: payments-ml
+      dailyTokens: 5000000
+      dailyUsd: 400
+    - team: platform
+      dailyTokens: 1000000
+      dailyUsd: 80
+  admission:
+    whenBudgetUnknown: BLOCK
+    whenBudgetExceeded: BLOCK
+    whenBudgetStoreDown: BLOCK
+  evidence:
+    requireBudgetSnapshot: true

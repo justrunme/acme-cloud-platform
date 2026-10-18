@@ -1,0 +1,9 @@
+{
+  "restorePoint": "RP-0017",
+  "storageClass": "fast-ssd-v1",
+  "sample": {
+    "payments.orders_count": 10422,
+    "payments.ledger_checksum": "sha256:demo-not-real-aaaaaaaa"
+  },
+  "result": "match"
+}

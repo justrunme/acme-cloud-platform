@@ -1,0 +1,34 @@
+# Chapter 10 — when the evidence system fails
+# Fail closed for mutations whose risk class requires evidence.
+# Emergency paths: explicit, time-bounded, attributable break-glass.
+apiVersion: policy.acme.example/v1alpha1
+kind: EvidencePlanePolicy
+metadata:
+  name: evidence-system-availability
+spec:
+  principle: "Unknown ≠ Safe"
+  unknownAsBlock: true
+  posture: |
+    Fail closed for mutations whose risk class requires evidence;
+    emergency paths require explicit, time-bounded, attributable break-glass.
+  dependencies:
+    - name: evidence-store
+      requiredForRiskClasses: ["data-plane", "recovery-affecting", "agent_tool", "gitops-prod"]
+    - name: policy-engine
+      requiredForRiskClasses: ["data-plane", "recovery-affecting", "agent_tool", "gitops-prod", "inference", "gpu"]
+    - name: dependency-graph-api
+      requiredForRiskClasses: ["data-plane", "recovery-affecting", "gitops-prod"]
+    - name: budget-store
+      requiredForRiskClasses: ["agent_tool", "inference", "gpu"]
+  onDependencyDown:
+    decision: BLOCK
+    appliesTo: matched risk classes only
+    message: "Evidence plane unavailable for a risk class that requires retained proof."
+  breakGlass:
+    allowed: true
+    example: "Emergency scale-out during overload while evidence-store is down"
+    requires:
+      - dual_control_approval
+      - time_bounded_ticket
+      - scope_bound_targets
+      - post_incident_evidence_backfill

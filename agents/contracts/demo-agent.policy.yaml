@@ -1,0 +1,38 @@
+# Simplified agent capability contract (Chapter 12)
+# Inspired by https://github.com/justrunme/agent-security-contract
+apiVersion: agents.acme.example/v1alpha1
+kind: AgentSecurityContract
+metadata:
+  name: demo-platform-agent
+spec:
+  principle: "Unknown ≠ Safe"
+  defaultVerdict: BLOCK
+  tools:
+    - name: fs.read
+      allowPaths: ["/workspace/**"]
+      verdict: ALLOW
+    - name: fs.write
+      allowPaths: ["/workspace/out/**"]
+      verdict: ALLOW
+    - name: http.fetch
+      allowHosts: ["api.acme.example", "docs.acme.example"]
+      verdict: ALLOW
+    - name: kubectl.apply
+      environments: ["dev", "staging"]
+      verdict: REQUIRE_APPROVAL
+    - name: kubectl.apply
+      environments: ["production"]
+      highImpact: true
+      verdict: REQUIRE_APPROVAL
+    - name: kubectl.delete
+      highImpact: true
+      verdict: REQUIRE_APPROVAL
+  deny:
+    - unknown_tool
+    - path_traversal
+    - secrets_read
+    - ssrf_metadata
+    - mcp_tool_digest_mismatch
+  evidence:
+    requireEnvelope: true
+    requirePolicySha256: true

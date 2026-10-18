@@ -1,0 +1,6 @@
+{
+  "job": "payments-backup-nightly",
+  "lastSuccessAt": "2026-10-15T02:00:00Z",
+  "exitCode": 0,
+  "note": "Backup success is an input to PROTECT/VALIDATE — not a PROVED restore by itself"
+}

@@ -1,0 +1,7 @@
+# Placeholder logs for RP-0017 — expand when Chapter 8 is drafted
+[RP-0017] starting restore drill on storageClass=fast-ssd-v1
+[RP-0017] snapshot restore → PVC postgres-data-restore
+[RP-0017] PVC Ready
+[RP-0017] payments checkout probe OK (RTO 18m)
+[RP-0017] checksum sample OK
+[RP-0017] PASS

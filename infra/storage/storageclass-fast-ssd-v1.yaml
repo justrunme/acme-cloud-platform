@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd-v1
+  labels:
+    acme.example/restore-contract: RP-0017
+provisioner: acme.example/csi-fast-ssd
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true

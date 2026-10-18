@@ -1,0 +1,24 @@
+# Recovery Contract for Acme payments (Chapter 8)
+# Inspired by https://github.com/justrunme/kanister-backup-restore
+apiVersion: restore.acme.example/v1alpha1
+kind: RecoveryContract
+metadata:
+  name: payments-postgres-objects
+spec:
+  tagline: "Restore should be proved, not assumed."
+  lifecycle: "PROTECT → VALIDATE → RESTORE → PROVE"
+  components:
+    - postgres
+    - object-store
+  require:
+    artifact_integrity: required
+    isolated_restore: required
+    application_ready: required
+    data_verification: required
+    cross_component_consistency: required
+  limits:
+    rto_seconds_max: 1800
+    evidence_freshness_hours_max: 24
+  verdicts:
+    pass: PROVED
+    fail: UNPROVED

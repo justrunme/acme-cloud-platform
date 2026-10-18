@@ -1,0 +1,17 @@
+{
+  "trace_id": "tr-agent-prod-deploy-0043",
+  "agent": "platform-agent",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "kubectl.apply",
+      "args": {
+        "namespace": "payments",
+        "resource": "Deployment/payments",
+        "image": "acme.example/payments:1.8.3",
+        "environment": "production"
+      },
+      "approval_token": null
+    }
+  ]
+}
