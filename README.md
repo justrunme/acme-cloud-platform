@@ -32,6 +32,7 @@ make corpus     # agent security corpus through the gate (Chapter 12)
 make policies   # inference budget and GPU admission policies against fixtures (Chapters 13-14)
 make restore    # Recovery Contract decisions over RestorePoint files (Chapter 8)
 make negative   # tampering and missing-field mutations that must be rejected
+make cases      # case specimens modeled on public incidents (Chapters 22-29)
 make test       # pytest
 make results    # regenerate results/results.json and docs/EVIDENCE.md
 make ci         # everything CI runs, including a drift check on generated files
@@ -57,6 +58,7 @@ commit SHA and run id as a build artifact.
 | GPU admission (`policies/gpu-admission.yaml`) | Schema and admission decisions on fixtures, autoscaler conflict detection | Pool size, class, quotas; no scheduling, no latency measurement |
 | Restore (`restore/`) | PROVED/UNPROVED logic against the Recovery Contract, StorageClass coverage that explains CHG-0042's BLOCK | Logs, RTO values, row counts |
 | PreSync gate (`cluster/`) | Argo CD PreSync hook on a kind cluster: BLOCK, hold, ALLOW, store down, edited package, manual sync | A ConfigMap stands in for each change; one node |
+| Case specimens (`cases/`) | Each case's check, its expected verdict, and an ALLOW once the missing evidence is supplied (`tests/test_cases.py`) | Every host, count and value; only the failure shape follows the cited public report |
 | Manifests (`apps/`, `infra/`) | Reviewed as text | Not applied to any cluster |
 
 ## Evidence packages
@@ -82,6 +84,7 @@ See [`evidence/README.md`](evidence/README.md) for what each digest covers.
 | `policies/` | Fail-closed, evidence-plane, inference-budget and GPU-admission policies; schemas and fixtures |
 | `restore/` | Recovery Contract and RestorePoints |
 | `agents/` | Agent Security Contract, catalog, approvals, scenario corpus |
+| `cases/` | Illustrative specimens modeled on public incidents, with their sources |
 | `tools/` | Validators, gate, corpus runner, result generator |
 | `scripts/` | `validate-evidence.sh` |
 | `cluster/` | kind + Argo CD e2e: PreSync gate, evidence store, scenarios |
@@ -102,6 +105,7 @@ See [`evidence/README.md`](evidence/README.md) for what each digest covers.
 | 11–12 | `agents/`, `evidence/CHG-0043.json`, `make corpus` |
 | 13–14 | `policies/inference-budget.yaml`, `policies/gpu-admission.yaml`, `make policies` |
 | 15–21 | Full pipeline, `make ci`, `make e2e`, `docs/vocabulary-mapping.md` |
+| 22–29 | `cases/`, `tools/check_cases.py`, `make cases` |
 
 Related public reference implementations by the author: `architecture-rehearsal`,
 `agent-security-contract`, `kanister-backup-restore`, `blastguard` (github.com/justrunme). Vocabulary

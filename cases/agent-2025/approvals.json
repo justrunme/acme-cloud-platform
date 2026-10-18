@@ -1,0 +1,4 @@
+{
+  "_comment": "ILLUSTRATIVE, case-local approval store. Empty: nobody approved a production write.",
+  "approvals": []
+}

@@ -1,0 +1,25 @@
+# Modeled on public incident: Knight Capital, 2012-08-01 (SEC order 34-70694).
+# Source: https://www.sec.gov/files/litigation/admin/2013/34-70694.pdf
+# ILLUSTRATIVE. Hosts, counts, digests and timestamps are invented for
+# teaching; only the shape of the failure follows the cited public report.
+# Not a reconstruction of the company's systems, and no claim that this
+# check would have prevented the incident. Run: make cases
+apiVersion: cases.acme.example/v1alpha1
+kind: IncidentCase
+metadata:
+  name: knight-2012-fleet-parity
+  illustrative: true
+  modeledOn: {incident: "Knight Capital, August 2012"}
+spec:
+  question: May the repurposed flag be switched on for the fleet?
+  check: fleet-parity
+  input:
+    expectedArtifact: router-2.0
+    targets: [srv-1, srv-2, srv-3, srv-4, srv-5, srv-6, srv-7, srv-8]
+    observed:
+      {srv-1: router-2.0, srv-2: router-2.0, srv-3: router-2.0,
+       srv-4: router-2.0, srv-5: router-2.0, srv-6: router-2.0,
+       srv-7: router-2.0, srv-8: router-1.9}
+    configChanges: [{flag: legacy_mode, from: unused, to: new_meaning}]
+    rollback: {revertsCode: true, restoresConfig: false, rehearsed: false}
+  expected: {verdict: BLOCK, reasonCode: fleet_drift}

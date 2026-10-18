@@ -1,0 +1,25 @@
+# Modeled on public incident: Facebook backbone outage, 2021-10-04.
+# Source: https://engineering.fb.com/2021/10/05/networking-traffic/outage-details/
+# ILLUSTRATIVE. Hosts, counts, digests and timestamps are invented for
+# teaching; only the shape of the failure follows the cited public report.
+# Not a reconstruction of the company's systems, and no claim that this
+# check would have prevented the incident. Run: make cases
+apiVersion: cases.acme.example/v1alpha1
+kind: IncidentCase
+metadata:
+  name: facebook-2021-recovery-path
+  illustrative: true
+  modeledOn: {incident: "Facebook backbone outage, October 2021"}
+spec:
+  question: May the capacity-assessment command run on the backbone?
+  check: recovery-path
+  input:
+    auditTool: {name: command-audit, version: "4.2", selfTest: unknown}
+    change:
+      command: assess-backbone-capacity
+      affects: [backbone, dns-anycast]
+    recoveryPaths:
+      - {name: internal-tooling, dependsOn: [dns-anycast, backbone]}
+      - {name: out-of-band, dependsOn: [backbone]}
+      - {name: onsite, dependsOn: [badge-system, backbone]}
+  expected: {verdict: BLOCK, reasonCode: audit_tool_unproven}

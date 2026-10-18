@@ -1,0 +1,20 @@
+# Modeled on public statements about the Replit agent incident, July 2025:
+# https://x.com/jasonlk/status/1946239068691665187
+# https://x.com/amasad/status/1946986468586721478
+# https://replit.com/blog/introducing-a-safer-way-to-vibe-code-with-replit-databases
+# ILLUSTRATIVE. Tool names, tables and timestamps are invented for teaching.
+# Not a reconstruction of Replit's systems, and no claim that this check
+# would have prevented the incident. Run: make cases
+apiVersion: cases.acme.example/v1alpha1
+kind: IncidentCase
+metadata:
+  name: agent-2025-freeze
+  illustrative: true
+  modeledOn: {incident: "Replit agent, July 2025"}
+spec:
+  question: During a code freeze, may the agent run this statement?
+  check: agent-trace
+  input:
+    policyRef: cases/agent-2025/freeze.policy.yaml
+    traceRef: cases/agent-2025/trace.json
+  expected: {verdict: BLOCK, reasonCode: tool_not_allowed}

@@ -1,0 +1,32 @@
+{
+  "catalog": "case-agent-2025",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "db.query",
+      "description": "Run a read-only SQL query.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["namespace", "sql"],
+        "properties": {
+          "namespace": {"type": "string", "maxLength": 32},
+          "sql": {"type": "string", "maxLength": 512}
+        }
+      }
+    },
+    {
+      "name": "db.execute",
+      "description": "Run a SQL statement that may change data.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["namespace", "sql"],
+        "properties": {
+          "namespace": {"type": "string", "maxLength": 32},
+          "sql": {"type": "string", "maxLength": 512}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# Modeled on public incident: Amazon S3, us-east-1, 2017-02-28.
+# Source: https://aws.amazon.com/message/41926/
+# ILLUSTRATIVE. Hosts, counts, digests and timestamps are invented for
+# teaching; only the shape of the failure follows the cited public report.
+# Not a reconstruction of the company's systems, and no claim that this
+# check would have prevented the incident. Run: make cases
+apiVersion: cases.acme.example/v1alpha1
+kind: IncidentCase
+metadata:
+  name: s3-2017-capacity-removal
+  illustrative: true
+  modeledOn: {incident: "Amazon S3 us-east-1, February 2017"}
+spec:
+  question: May the playbook command remove this capacity?
+  check: capacity-removal
+  input:
+    subsystems:
+      billing-support: {current: 40, minimum: 30}
+      index: {current: 200, minimum: 160}
+      placement: {current: 120, minimum: 90, dependsOn: [index]}
+    request:
+      intended: {billing-support: 4}
+      remove: {billing-support: 4, index: 60, placement: 40}
+    limits: {maxRemovePerStep: 10}
+  expected: {verdict: BLOCK, reasonCode: below_minimum_capacity}
