@@ -13,6 +13,10 @@ Needs Docker, `kind`, `kubectl`, Python with `requirements.txt`, and network acc
 pulls the manifests from `REPO_URL` at `REVISION` (default: `HEAD`, which must be pushed). CI runs the
 same script in the `kind-e2e` job and uploads `results/cluster/kind-e2e.json`.
 
+The committed `results/cluster/kind-e2e.json` is the artifact of CI run
+[39139548905](https://github.com/justrunme/acme-cloud-platform/actions/runs/39139548905) on `main` at
+`98478c6`; `docs/EVIDENCE.md` renders it. Later runs upload their own artifact and do not overwrite it.
+
 ## Pieces
 
 | Path | Role |

@@ -1,0 +1,208 @@
+{
+  "schema_version": "acme.cluster-e2e/v1",
+  "illustrative_estate": true,
+  "note": "Results of running cluster/e2e.sh on the setup below. They hold on this setup only: one kind node, a ConfigMap standing in for the change, and a single-pod evidence store.",
+  "revision": "98478c608c55742d95b056e19bb48cf4d5b3d03f",
+  "repo": "https://github.com/justrunme/acme-cloud-platform.git",
+  "run_id": "39139548905",
+  "run_url": "https://github.com/justrunme/acme-cloud-platform/actions/runs/39139548905",
+  "setup": {
+    "kubernetes": "v1.31.0",
+    "kind": "kind v0.24.0 go1.22.6 linux/amd64",
+    "argocd_image": "quay.io/argoproj/argocd:v2.13.3",
+    "nodes": 1,
+    "runner": "ubuntu24",
+    "cpus": 4
+  },
+  "scenarios": [
+    {
+      "id": "chg-0042-block",
+      "path": "cluster/changes/chg-0042",
+      "store": "up",
+      "trigger": "auto",
+      "expected": {
+        "decision": "BLOCK",
+        "reason": "verdict_block",
+        "applied": false
+      },
+      "gate_decision": "BLOCK",
+      "gate_reason": "verdict_block",
+      "gate_elapsed_ms": 81,
+      "gate_errors": [],
+      "record": "records/CHG-0042-7630c783ebd0.json",
+      "sync_phase": "Failed",
+      "sync_message": "one or more synchronization tasks completed unsuccessfully",
+      "sync_started": "2026-10-18T15:15:50Z",
+      "sync_finished": "2026-10-18T15:15:54Z",
+      "sync_seconds": 4,
+      "applied": false,
+      "ok": true
+    },
+    {
+      "id": "chg-0043-hold",
+      "path": "cluster/changes/chg-0043",
+      "store": "up",
+      "trigger": "auto",
+      "expected": {
+        "decision": "REQUIRE_APPROVAL",
+        "reason": "approval_required",
+        "applied": false
+      },
+      "gate_decision": "REQUIRE_APPROVAL",
+      "gate_reason": "approval_required",
+      "gate_elapsed_ms": 115,
+      "gate_errors": [],
+      "record": "records/CHG-0043-79fb3a874716.json",
+      "sync_phase": "Failed",
+      "sync_message": "one or more synchronization tasks completed unsuccessfully",
+      "sync_started": "2026-10-18T15:15:56Z",
+      "sync_finished": "2026-10-18T15:16:00Z",
+      "sync_seconds": 4,
+      "applied": false,
+      "ok": true
+    },
+    {
+      "id": "chg-0044-allow",
+      "path": "cluster/changes/chg-0044",
+      "store": "up",
+      "trigger": "auto",
+      "expected": {
+        "decision": "ALLOW",
+        "reason": "verdict_allow",
+        "applied": true
+      },
+      "gate_decision": "ALLOW",
+      "gate_reason": "verdict_allow",
+      "gate_elapsed_ms": 79,
+      "gate_errors": [],
+      "record": "records/CHG-0044-bfbdaf8759a4.json",
+      "sync_phase": "Succeeded",
+      "sync_message": "successfully synced (all tasks run)",
+      "sync_started": "2026-10-18T15:16:01Z",
+      "sync_finished": "2026-10-18T15:16:05Z",
+      "sync_seconds": 4,
+      "applied": true,
+      "ok": true
+    },
+    {
+      "id": "chg-0045-store-down",
+      "path": "cluster/changes/chg-0045",
+      "store": "down",
+      "trigger": "auto",
+      "expected": {
+        "decision": "BLOCK",
+        "reason": "evidence_store_unavailable",
+        "applied": false
+      },
+      "gate_decision": "BLOCK",
+      "gate_reason": "evidence_store_unavailable",
+      "gate_elapsed_ms": 14,
+      "gate_errors": [
+        "evidence store unreachable: <urlopen error [Errno 111] Connection refused>",
+        "decision record not retained: <urlopen error [Errno 111] Connection refused>"
+      ],
+      "record": null,
+      "sync_phase": "Failed",
+      "sync_message": "one or more synchronization tasks completed unsuccessfully",
+      "sync_started": "2026-10-18T15:16:37Z",
+      "sync_finished": "2026-10-18T15:16:40Z",
+      "sync_seconds": 3,
+      "applied": false,
+      "ok": true
+    },
+    {
+      "id": "chg-0044-store-down",
+      "path": "cluster/changes/chg-0044",
+      "store": "down",
+      "trigger": "auto",
+      "expected": {
+        "decision": "BLOCK",
+        "reason": "evidence_store_unavailable",
+        "applied": false
+      },
+      "gate_decision": "BLOCK",
+      "gate_reason": "evidence_store_unavailable",
+      "gate_elapsed_ms": 14,
+      "gate_errors": [
+        "evidence store unreachable: <urlopen error [Errno 111] Connection refused>",
+        "decision record not retained: <urlopen error [Errno 111] Connection refused>"
+      ],
+      "record": null,
+      "sync_phase": "Failed",
+      "sync_message": "one or more synchronization tasks completed unsuccessfully",
+      "sync_started": "2026-10-18T15:17:16Z",
+      "sync_finished": "2026-10-18T15:17:19Z",
+      "sync_seconds": 3,
+      "applied": false,
+      "ok": true
+    },
+    {
+      "id": "chg-0042-edited-to-allow",
+      "path": "cluster/changes/chg-0042-edited",
+      "store": "up",
+      "trigger": "auto",
+      "expected": {
+        "decision": "BLOCK",
+        "reason": "evidence_invalid",
+        "applied": false
+      },
+      "gate_decision": "BLOCK",
+      "gate_reason": "evidence_invalid",
+      "gate_elapsed_ms": 82,
+      "gate_errors": [
+        "digest evidence.envelopeSha256: recorded sha256:42d5feea5ae6d86b44fb14c63cf27e31aa96d20ecb1e24ec50b70978a6f4237c != computed sha256:ff3ad85c4c7c6d97626bcce59e2875f7219e4a422de023cb0ea6b55be02af101",
+        "verdict.decision ALLOW requires rehearsal.result=pass",
+        "verdict.decision ALLOW with non-empty reconstruction.unknowns (unknown is not safe)"
+      ],
+      "record": "records/CHG-0042-869cb97b14b9.json",
+      "sync_phase": "Failed",
+      "sync_message": "one or more synchronization tasks completed unsuccessfully",
+      "sync_started": "2026-10-18T15:17:22Z",
+      "sync_finished": "2026-10-18T15:17:26Z",
+      "sync_seconds": 4,
+      "applied": false,
+      "ok": true
+    },
+    {
+      "id": "chg-0042-manual-sync",
+      "path": "cluster/changes/chg-0042",
+      "store": "up",
+      "trigger": "manual",
+      "expected": {
+        "decision": "BLOCK",
+        "reason": "verdict_block",
+        "applied": false
+      },
+      "gate_decision": "BLOCK",
+      "gate_reason": "verdict_block",
+      "gate_elapsed_ms": 81,
+      "gate_errors": [],
+      "record": "records/CHG-0042-846f08a35fdb.json",
+      "sync_phase": "Failed",
+      "sync_message": "one or more synchronization tasks completed unsuccessfully",
+      "sync_started": "2026-10-18T15:17:27Z",
+      "sync_finished": "2026-10-18T15:17:31Z",
+      "sync_seconds": 4,
+      "applied": false,
+      "ok": true
+    }
+  ],
+  "retained_records": [
+    "CHG-0042-7630c783ebd0.json",
+    "CHG-0042-846f08a35fdb.json",
+    "CHG-0042-869cb97b14b9.json",
+    "CHG-0043-79fb3a874716.json",
+    "CHG-0044-bfbdaf8759a4.json"
+  ],
+  "summary": {
+    "scenarios": 7,
+    "passed": 7,
+    "blocked_or_held": 6,
+    "applied_without_allow": 0,
+    "allowed_and_applied": 1,
+    "records_retained": 5,
+    "gate_elapsed_ms_max": 115,
+    "sync_seconds_max": 4,
+    "all_passed": true
+  }
+}
