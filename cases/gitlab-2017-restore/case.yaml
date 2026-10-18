@@ -1,0 +1,24 @@
+# Modeled on public incident: GitLab.com database outage, 2017-01-31.
+# Source: https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/
+# ILLUSTRATIVE. Hosts, counts, digests and timestamps are invented for
+# teaching; only the shape of the failure follows the cited public report.
+# Not a reconstruction of the company's systems, and no claim that this
+# check would have prevented the incident. Run: make cases
+apiVersion: cases.acme.example/v1alpha1
+kind: IncidentCase
+metadata:
+  name: gitlab-2017-restore
+  illustrative: true
+  modeledOn: {incident: "GitLab.com database outage, January 2017"}
+spec:
+  question: May a destructive step run on the primary database?
+  check: restore
+  input:
+    contractRef: restore/contracts/recovery-contract.yaml
+    restorePoint:
+      assertions:
+        - {id: B1, statement: "nightly dump job was scheduled", result: pass}
+        - {id: B2, statement: "dump object present in bucket", result: unknown}
+        - {id: B3, statement: "dump restored and queried", result: not_run}
+      verdict: {rtoSeconds: null}
+  expected: {verdict: BLOCK, reasonCode: restore_unproved}

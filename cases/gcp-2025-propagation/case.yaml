@@ -1,0 +1,25 @@
+# Modeled on public incident: Google Cloud Service Control, 2025-06-12.
+# Source: https://status.cloud.google.com/incidents/ow5i3PPK96RduMcb1SsW
+# ILLUSTRATIVE. Hosts, counts, digests and timestamps are invented for
+# teaching; only the shape of the failure follows the cited public report.
+# Not a reconstruction of the company's systems, and no claim that this
+# check would have prevented the incident. Run: make cases
+apiVersion: cases.acme.example/v1alpha1
+kind: IncidentCase
+metadata:
+  name: gcp-2025-propagation
+  illustrative: true
+  modeledOn: {incident: "Google Cloud Service Control, June 2025"}
+spec:
+  question: May this policy record replicate to every region?
+  check: propagation
+  input:
+    record: {policy_id: qp-7, limit: "", scope: ""}
+    consumer:
+      requiredFields: [policy_id, limit, scope]
+      codePath:
+        name: quota-check-v2
+        flagProtected: false
+        exercisedInRollout: false
+    propagation: {mode: global-immediate}
+  expected: {verdict: BLOCK, reasonCode: data_fails_consumer_schema}

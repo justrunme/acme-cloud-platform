@@ -31,6 +31,8 @@ jobs:
         run: make restore
       - name: Negative checks
         run: make negative
+      - name: Case specimens modeled on public incidents
+        run: make cases
       - name: Tests
         run: make test
       - name: Regenerate results.json and EVIDENCE.md and fail on drift

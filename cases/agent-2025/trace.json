@@ -1,0 +1,13 @@
+{
+  "trace_id": "tr-case-agent-2025",
+  "agent": "app-agent",
+  "evaluated_at": "2026-10-18T09:00:00Z",
+  "illustrative": true,
+  "calls": [
+    {"id": "call-1", "tool": "db.query", "via": "gateway",
+     "args": {"namespace": "prod", "sql": "SELECT count(*) FROM contacts"}},
+    {"id": "call-2", "tool": "db.execute", "via": "gateway",
+     "args": {"namespace": "prod", "sql": "DELETE FROM contacts"},
+     "approval_id": null}
+  ]
+}

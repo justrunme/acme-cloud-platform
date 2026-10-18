@@ -1,0 +1,25 @@
+# Modeled on public incident: CrowdStrike Channel File 291, 2024-07-19.
+# Source: https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf
+# ILLUSTRATIVE. Hosts, counts, digests and timestamps are invented for
+# teaching; only the shape of the failure follows the cited public report.
+# Not a reconstruction of the company's systems, and no claim that this
+# check would have prevented the incident. Run: make cases
+apiVersion: cases.acme.example/v1alpha1
+kind: IncidentCase
+metadata:
+  name: crowdstrike-2024-content-contract
+  illustrative: true
+  modeledOn: {incident: "CrowdStrike Channel File 291, July 2024"}
+spec:
+  question: May these content instances ship to every host?
+  check: content-contract
+  input:
+    template: {declaredFields: 21}
+    consumer: {suppliedFields: 20}
+    tests: {nonWildcardFieldsCovered: [0, 1, 2, 3, 4, 5]}
+    instances:
+      - {id: inst-earlier, nonWildcardFields: [0, 3]}
+      - {id: inst-new, nonWildcardFields: [0, 20]}
+    rollout:
+      rings: [{scope: all-hosts}]
+  expected: {verdict: BLOCK, reasonCode: field_beyond_supplied_inputs}

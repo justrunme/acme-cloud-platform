@@ -1,0 +1,35 @@
+# Case-local Agent Security Contract (ILLUSTRATIVE), evaluated by
+# tools/asc_gate.py. Modeled on public statements about the Replit agent
+# incident of July 2025; see cases/agent-2025-*/case.yaml for sources.
+# Normal operation: writes to prod need an approval bound to the request.
+apiVersion: agents.acme.example/v1alpha1
+kind: AgentSecurityContract
+metadata:
+  name: case-agent-2025
+  version: "1.0.0"
+spec:
+  principle: "Unknown ≠ Safe"
+  defaultVerdict: BLOCK
+  onUnavailable: BLOCK
+  evaluatorTimeoutMs: 1000
+  catalog:
+    ref: cases/agent-2025/tools.json
+    sha256: "sha256:16645042b7f2aff4f33b6c6bf3d9a5a90b50193f1f2d511595d3dc4381163508"
+  requireGateway: true
+  agents:
+    app-agent:
+      allowTools: [db.query, db.execute]
+  globalDenyPatterns: []
+  tools:
+    db.query:
+      impact: low
+      namespaces: [dev, prod]
+    db.execute:
+      impact: high
+      namespaces: [dev, prod]
+      approvalExemptNamespaces: [dev]
+  rateLimits:
+    maxCallsPerTrace: 8
+  approvals:
+    storeRef: cases/agent-2025/approvals.json
+    bindTo: request_digest
