@@ -120,23 +120,31 @@ def semantic_errors(pkg: dict) -> list[str]:
     decision = ver.get("decision")
     if decision == "ALLOW":
         if reh.get("result") != "pass":
-            errs.append("verdict.decision ALLOW requires rehearsal.result=pass")
+            errs.append("verdict.decision ALLOW requires "
+                        "rehearsal.result=pass")
         if rec.get("unknowns"):
-            errs.append("verdict.decision ALLOW with non-empty reconstruction.unknowns (unknown is not safe)")
-        if reh.get("kind") == "restore" and ver.get("recoveryVerdict") != "PROVED":
-            errs.append("restore change may be ALLOW only with recoveryVerdict=PROVED")
+            errs.append("verdict.decision ALLOW with non-empty "
+                        "reconstruction.unknowns (unknown is not safe)")
+        if (reh.get("kind") == "restore"
+                and ver.get("recoveryVerdict") != "PROVED"):
+            errs.append("restore change may be ALLOW only with "
+                        "recoveryVerdict=PROVED")
     if reh.get("result") == "inconclusive" and decision != "BLOCK":
         errs.append("rehearsal.result=inconclusive must map to BLOCK")
     if ver.get("recoveryVerdict") == "UNPROVED" and decision == "ALLOW":
         errs.append("recoveryVerdict=UNPROVED cannot be ALLOW")
     raw = ver.get("rehearsalDecision")
-    if raw is not None and REHEARSAL_TO_VERDICT.get(raw) != decision:
-        errs.append(f"rehearsalDecision={raw} maps to {REHEARSAL_TO_VERDICT.get(raw)}, not {decision}")
+    mapped = REHEARSAL_TO_VERDICT.get(raw)
+    if raw is not None and mapped != decision:
+        errs.append(f"rehearsalDecision={raw} maps to {mapped}, "
+                    f"not {decision}")
     acs = ver.get("acsDisposition")
     if acs is not None and ACS_FOR_VERDICT.get(decision) != acs:
-        errs.append(f"acsDisposition={acs} inconsistent with decision={decision}")
+        errs.append(f"acsDisposition={acs} inconsistent with "
+                    f"decision={decision}")
     if pkg.get("metadata", {}).get("illustrative") is not True:
-        errs.append("metadata.illustrative must be true: every package in this companion is a fictional teaching scenario")
+        errs.append("metadata.illustrative must be true: every package "
+                    "in this companion is a fictional teaching scenario")
     return errs
 
 

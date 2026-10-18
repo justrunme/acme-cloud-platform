@@ -26,12 +26,15 @@ def decide(policy: dict, request: dict, snapshot: dict | None, policy_engine: st
     return {"verdict": "ALLOW", "reason_code": "within_quota"}
 
 
+AUTOSCALERS = ("HorizontalPodAutoscaler", "ScaledObject")
+
+
 def autoscaler_conflicts(manifests: list[dict]) -> list[str]:
-    """Return workload targets controlled by more than one autoscaler (HPA and/or KEDA ScaledObject)."""
+    """Return workloads controlled by more than one autoscaler
+    (HPA and/or KEDA ScaledObject)."""
     seen: dict[str, int] = {}
     for m in manifests:
-        kind = m.get("kind")
-        if kind not in ("HorizontalPodAutoscaler", "ScaledObject"):
+        if m.get("kind") not in AUTOSCALERS:
             continue
         ref = m.get("spec", {}).get("scaleTargetRef", {})
         ns = m.get("metadata", {}).get("namespace", "default")

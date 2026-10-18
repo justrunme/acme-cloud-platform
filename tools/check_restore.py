@@ -18,12 +18,17 @@ def _ts(v: str) -> datetime:
 
 
 def evaluate_rp(summary: dict, contract: dict) -> dict:
-    required = [k for k, v in contract["spec"]["require"].items() if v == "required"]
-    covered = {c for a in summary["assertions"] if a.get("result") == "pass" for c in a.get("covers", [])}
-    failed = [a["id"] for a in summary["assertions"] if a.get("result") != "pass"]
+    """PROVED only if every required clause has a passing assertion
+    and the RTO is known and within the contract limit."""
+    spec = contract["spec"]
+    required = [k for k, v in spec["require"].items() if v == "required"]
+    asserts = summary["assertions"]
+    covered = {c for a in asserts if a.get("result") == "pass"
+               for c in a.get("covers", [])}
+    failed = [a["id"] for a in asserts if a.get("result") != "pass"]
     missing = [c for c in required if c not in covered]
     rto = summary.get("verdict", {}).get("rtoSeconds")
-    rto_max = contract["spec"]["limits"]["rto_seconds_max"]
+    rto_max = spec["limits"]["rto_seconds_max"]
     problems = []
     if missing:
         problems.append(f"clauses without passing assertion: {missing}")
@@ -33,7 +38,9 @@ def evaluate_rp(summary: dict, contract: dict) -> dict:
         problems.append("rtoSeconds missing (unknown is not safe)")
     elif rto > rto_max:
         problems.append(f"rtoSeconds {rto} > {rto_max}")
-    return {"computed": "UNPROVED" if problems else "PROVED", "problems": problems, "rtoSeconds": rto, "rtoSecondsMax": rto_max}
+    return {"computed": "UNPROVED" if problems else "PROVED",
+            "problems": problems, "rtoSeconds": rto,
+            "rtoSecondsMax": rto_max}
 
 
 def run(root: Path = ROOT) -> dict:
