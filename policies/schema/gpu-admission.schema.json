@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Acme GPUAdmissionPolicy",
+  "type": "object",
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "policy.acme.example/v1alpha1"
+    },
+    "kind": {
+      "const": "GPUAdmissionPolicy"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "name",
+        "illustrative"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "illustrative": {
+          "const": true
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "principle",
+        "clusters",
+        "tenants",
+        "admission"
+      ],
+      "properties": {
+        "principle": {
+          "type": "string"
+        },
+        "clusters": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "totalGpus",
+              "gpuClasses"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "totalGpus": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "gpuClasses": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "reservedFor": {
+                "type": "array"
+              }
+            }
+          }
+        },
+        "tenants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "maxGpus"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "maxGpus": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "admission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "whenQuotaUnknown",
+            "whenFairnessCheckInconclusive",
+            "whenClassUnavailable",
+            "whenPolicyEngineDown",
+            "whenTenantUnknown",
+            "whenAutoscalerConflict",
+            "agentInitiatedMutation"
+          ],
+          "properties": {
+            "whenQuotaUnknown": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenFairnessCheckInconclusive": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenClassUnavailable": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenPolicyEngineDown": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenTenantUnknown": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "whenAutoscalerConflict": {
+              "type": "string",
+              "const": "BLOCK"
+            },
+            "agentInitiatedMutation": {
+              "enum": [
+                "REQUIRE_APPROVAL",
+                "BLOCK"
+              ]
+            }
+          }
+        },
+        "evidence": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

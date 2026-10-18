@@ -1,4 +1,5 @@
-# Placeholder logs for RP-0017 — expand when Chapter 8 is drafted
+# ILLUSTRATIVE: fictional restore-drill log for the Acme teaching estate in the book
+# "Prove It Before Production". No real drill ran; the RTO below is not a measurement.
 [RP-0017] starting restore drill on storageClass=fast-ssd-v1
 [RP-0017] snapshot restore → PVC postgres-data-restore
 [RP-0017] PVC Ready

@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-pool-capacity-exceeded
+chapter: "14"
+scenario: "Tenant has quota left but the shared pool is full"
+request: {tenant: platform-agents, gpus: 2, gpuClass: nvidia-l4, initiator: human}
+snapshot: {status: available, tenantAllocated: {payments-ml: 4, inference: 3}, poolAllocated: 7}
+expected: BLOCK

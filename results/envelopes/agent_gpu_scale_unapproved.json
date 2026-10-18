@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": "1.0.0",
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": "sha256:3b4754c19d12fb29fdcd7045c08eb40a8d24dd7a3e661c0d138777967b852575",
+  "scenario_id": "agent_gpu_scale_unapproved",
+  "trace_id": "tr-gpu-scale",
+  "verdict": "REQUIRE_APPROVAL",
+  "reason_code": "approval_required",
+  "reason": "call-1: high-impact kubectl.apply; bind approval to sha256:4574ceae8a252cc11e76de474d5a4affd85252b84805bf740b6453c649e209b8",
+  "acs_disposition": "ASK",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "kubectl.apply",
+      "verdict": "REQUIRE_APPROVAL",
+      "reason_code": "approval_required",
+      "request_digest": "sha256:4574ceae8a252cc11e76de474d5a4affd85252b84805bf740b6453c649e209b8"
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:0e15f1d11daf0498e940da5e4fd8e84ec21238685e8ae18ab4f74b872629b05a"
+}

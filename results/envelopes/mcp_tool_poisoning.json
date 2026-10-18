@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": "1.0.0",
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": "sha256:c51e612ff5a05443614382da18c6421f44512c4323e92de142dc4496145eea72",
+  "scenario_id": "mcp_tool_poisoning",
+  "trace_id": "tr-tool-poisoning",
+  "verdict": "BLOCK",
+  "reason_code": "catalog_digest_mismatch",
+  "reason": "call-1: runtime catalog sha256:c51e612ff5a05443614382da18c6421f44512c4323e92de142dc4496145eea72 != pinned sha256:3b4754c19d12fb29fdcd7045c08eb40a8d24dd7a3e661c0d138777967b852575",
+  "acs_disposition": "DENY",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "inventory.get",
+      "verdict": "BLOCK",
+      "reason_code": "catalog_digest_mismatch",
+      "request_digest": null
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:e1d611c40087eed56c457832da9f32b4b0289d0c6927714a9eb650ee98b76f5f"
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": null,
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": null,
+  "scenario_id": "policy_store_unavailable",
+  "trace_id": "tr-policy-store-down",
+  "verdict": "BLOCK",
+  "reason_code": "evaluator_unavailable",
+  "reason": "onUnavailable=BLOCK: policy store unavailable",
+  "acs_disposition": "DENY",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "fs.read",
+      "verdict": "BLOCK",
+      "reason_code": "evaluator_unavailable",
+      "request_digest": null
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:257f3d4aa441db070b35772993bad3884b561d70fa9f16b5e15def7ea72c8035"
+}

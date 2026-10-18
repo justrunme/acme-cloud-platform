@@ -1,0 +1,25 @@
+{
+  "schema_version": "acme.asc.envelope/v1",
+  "policy_ref": "agents/contracts/demo-agent.policy.yaml",
+  "policy_version": "1.0.0",
+  "policy_sha256": "sha256:abaffd671f962162a352df69cbd59c18f7fba28adc5443daaec61dddf0303228",
+  "catalog_sha256": "sha256:3b4754c19d12fb29fdcd7045c08eb40a8d24dd7a3e661c0d138777967b852575",
+  "scenario_id": "path_traversal",
+  "trace_id": "tr-path-traversal",
+  "verdict": "BLOCK",
+  "reason_code": "argument_denied:path_traversal",
+  "reason": "call-1: argument matches deny pattern path_traversal",
+  "acs_disposition": "DENY",
+  "evaluated_at": "2026-10-15T10:00:00Z",
+  "calls": [
+    {
+      "id": "call-1",
+      "tool": "fs.read",
+      "verdict": "BLOCK",
+      "reason_code": "argument_denied:path_traversal",
+      "request_digest": "sha256:f6ce2729ee762c509af19e58caa40a1d9f27157074f0a8861642c90301de3c45"
+    }
+  ],
+  "inputs_sha256": "sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926",
+  "envelope_sha256": "sha256:0cf1475c94e495886ba4b89a1f3de2aee5951d0c4bbb5a085b93cc283a39900d"
+}

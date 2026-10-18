@@ -1,5 +1,6 @@
 # Recovery Contract for Acme payments (Chapter 8)
 # Inspired by https://github.com/justrunme/kanister-backup-restore
+# ILLUSTRATIVE: limits are teaching values for the fictional Acme estate.
 apiVersion: restore.acme.example/v1alpha1
 kind: RecoveryContract
 metadata:

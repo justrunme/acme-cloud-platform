@@ -1,4 +1,6 @@
 {
+  "illustrative": true,
+  "illustrativeNote": "Fictional Acme teaching data for the book. Timestamps, row counts, RTO values and outcomes are illustrative, not measurements.",
   "job": "payments-backup-nightly",
   "lastSuccessAt": "2026-10-15T02:00:00Z",
   "exitCode": 0,

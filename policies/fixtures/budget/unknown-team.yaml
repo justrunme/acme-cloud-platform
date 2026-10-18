@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: budget-unknown-team
+chapter: "13"
+scenario: "Request from a team with no budget entry"
+request: {team: growth-experiments, model: acme-small, tokens: 1000}
+snapshot: {status: available, usedTokens: 0, usedUsd: 0, ageSeconds: 10}
+expected: BLOCK

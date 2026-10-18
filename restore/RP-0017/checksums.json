@@ -1,9 +1,11 @@
 {
+  "illustrative": true,
+  "illustrativeNote": "Fictional Acme teaching data for the book. Timestamps, row counts, RTO values and outcomes are illustrative, not measurements.",
   "restorePoint": "RP-0017",
   "storageClass": "fast-ssd-v1",
   "sample": {
     "payments.orders_count": 10422,
-    "payments.ledger_checksum": "sha256:demo-not-real-aaaaaaaa"
+    "payments.ledger_checksum": "illustrative-not-computed"
   },
   "result": "match"
 }

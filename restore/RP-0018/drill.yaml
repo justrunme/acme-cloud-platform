@@ -1,3 +1,4 @@
+# ILLUSTRATIVE drill definition for the fictional Acme estate; evaluated by tools/check_restore.py.
 apiVersion: restore.acme.example/v1alpha1
 kind: RestoreDrill
 metadata:

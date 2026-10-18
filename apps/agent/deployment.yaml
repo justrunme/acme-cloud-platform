@@ -1,4 +1,6 @@
-# Placeholder for Part IV — AI agent with tool access to infrastructure
+# Platform agent (Part IV, Chapters 11-12). Fictional Acme workload; the image does not exist.
+# Every tool call goes through the evaluating gateway (tools/asc_gate.py models its decisions);
+# see networkpolicy.yaml for the network side of "no gateway, no tool call".
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,6 +25,8 @@ spec:
           image: acme.example/platform-agent:0.1.0
           env:
             - name: MCP_ENDPOINT
-              value: http://mcp.ai.svc
+              value: http://mcp-gateway.ai.svc
             - name: DEFAULT_VERDICT
               value: REQUIRE_APPROVAL
+            - name: AGENT_POLICY_REF
+              value: agents/contracts/demo-agent.policy.yaml

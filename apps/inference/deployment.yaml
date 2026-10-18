@@ -1,4 +1,6 @@
-# Placeholder for Part IV — GPU / inference admission chapters
+# Inference service (Part IV, Chapters 13-14). Fictional Acme workload; the image does not exist.
+# Spend is governed by policies/inference-budget.yaml and GPU placement by
+# policies/gpu-admission.yaml; both are evaluated on fixtures by tools/check_policies.py.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,6 +9,7 @@ metadata:
   labels:
     app: inference
     acme.example/gpu: "true"
+    ai.acme.example/budget-sensitive: "true"
 spec:
   replicas: 1
   selector:
@@ -17,6 +20,8 @@ spec:
       labels:
         app: inference
     spec:
+      nodeSelector:
+        acme.example/gpu-class: nvidia-l4
       containers:
         - name: inference
           image: acme.example/inference:0.3.0

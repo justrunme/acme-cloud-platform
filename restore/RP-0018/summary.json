@@ -4,7 +4,10 @@
   "metadata": {
     "id": "RP-0018",
     "completedAt": "2026-10-15T16:38:00Z",
-    "actor": "sre-oncall@acme.example"
+    "actor": "sre-oncall@acme.example",
+    "illustrative": true,
+    "illustrativeNote": "Fictional Acme teaching data for the book. Timestamps, row counts, RTO values and outcomes are illustrative, not measurements.",
+    "contractRef": "restore/contracts/recovery-contract.yaml"
   },
   "scope": {
     "namespace": "payments",
@@ -14,19 +17,38 @@
   },
   "assertions": [
     {
+      "id": "A0",
+      "statement": "Backup artifact checksums verified before restore",
+      "covers": [
+        "artifact_integrity"
+      ],
+      "result": "pass"
+    },
+    {
       "id": "A1",
       "statement": "Isolated restore namespace became Ready within RTO",
-      "result": "pass"
+      "result": "pass",
+      "covers": [
+        "isolated_restore",
+        "application_ready"
+      ]
     },
     {
       "id": "A2",
       "statement": "Object keys referenced by restored rows exist with matching sha256",
-      "result": "pass"
+      "result": "pass",
+      "covers": [
+        "data_verification",
+        "cross_component_consistency"
+      ]
     },
     {
       "id": "A3",
       "statement": "payments checkout probe succeeded",
-      "result": "pass"
+      "result": "pass",
+      "covers": [
+        "application_ready"
+      ]
     }
   ],
   "verdict": {

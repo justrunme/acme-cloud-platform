@@ -1,6 +1,6 @@
 # Chapter 1 companion — Green is not safe
 
-Mirror of the book’s opening example. Full prose: `../../drafts/ch01-production-is-a-terrible-test-environment.md`.
+Mirror of the opening example in Chapter 1 of *Prove It Before Production* ("Production Is a Terrible Test Environment").
 
 ## Naive path
 

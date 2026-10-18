@@ -5,6 +5,8 @@
     "id": "CHG-0045",
     "createdAt": "2026-10-16T08:00:00Z",
     "actor": "engineer@acme.example",
+    "illustrative": true,
+    "illustrativeNote": "Fictional Acme teaching scenario for the book. Actor, timestamps, commitSha and the scenario itself are illustrative; every sha256 digest is real and recomputed by scripts/validate-evidence.sh.",
     "traceId": "tr-evidence-store-down-0045",
     "commitSha": "demo0000000000000000000000000000000045",
     "labels": {
@@ -26,7 +28,7 @@
       "Change is tiny",
       "Business wants more capacity now"
     ],
-    "changeDigest": "sha256:demo-change-chg0045-scale-orders"
+    "changeDigest": "sha256:5c379a3086e0e30dec0bf8a189871997e52c60b5b847b1bc3157800262a6d83e"
   },
   "reconstruction": {
     "graphRef": "graphs/payments-postgres.yaml",
@@ -41,7 +43,8 @@
     "unknowns": [
       "Whether a durable evidence package can be retained for this change",
       "Whether prior RestorePoint proofs are readable during the outage window"
-    ]
+    ],
+    "baselineDigest": "sha256:b73b86ac92f42e8fc40cbaa5d51f69f5277d6ae03e3300cfe4d0640fb788cfd6"
   },
   "rehearsal": {
     "kind": "policy",
@@ -51,7 +54,8 @@
     "findings": [
       "Evidence system dependency failed",
       "Cannot retain proof ⇒ cannot claim safety"
-    ]
+    ],
+    "semanticDigest": "sha256:a6c9f90283a7651e10ddfae3c5b246e52dcd7f1de786cbd661ad5698f1577c2a"
   },
   "verdict": {
     "decision": "BLOCK",
@@ -64,19 +68,21 @@
       "Break-glass is explicit, attributable, and time-bounded"
     ],
     "policyRef": "policies/evidence-system-availability.yaml",
-    "policySha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    "policySha256": "sha256:1e5a7624ee3ef3f698c33e5edc700276c2437b29e5854efb897da44eb61a95cf"
   },
   "evidence": {
     "retentionDays": 365,
-    "envelopeSha256": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "envelopeSha256": "sha256:afae0b77a2a0822984454de53bcb518bb4fcb4ecbd846e74c7c2db9e3290c3ee",
     "artifacts": [
       {
         "path": "policies/evidence-system-availability.yaml",
-        "description": "Fail-closed rules when evidence dependencies are down"
+        "description": "Fail-closed rules when evidence dependencies are down",
+        "sha256": "sha256:1e5a7624ee3ef3f698c33e5edc700276c2437b29e5854efb897da44eb61a95cf"
       },
       {
         "path": "rehearsals/CHG-0045-evidence-store-down.yaml",
-        "description": "Rehearsal of evidence-plane outage"
+        "description": "Rehearsal of evidence-plane outage",
+        "sha256": "sha256:a6c9f90283a7651e10ddfae3c5b246e52dcd7f1de786cbd661ad5698f1577c2a"
       }
     ]
   },

@@ -5,6 +5,8 @@
     "id": "CHG-0044",
     "createdAt": "2026-10-15T16:40:00Z",
     "actor": "sre-oncall@acme.example",
+    "illustrative": true,
+    "illustrativeNote": "Fictional Acme teaching scenario for the book. Actor, timestamps, commitSha and the scenario itself are illustrative; every sha256 digest is real and recomputed by scripts/validate-evidence.sh.",
     "traceId": "tr-restore-drill-0044",
     "commitSha": "demo0000000000000000000000000000000044",
     "labels": {
@@ -25,11 +27,11 @@
     "naiveSignals": [
       "Backup Job exit code 0 every night this month"
     ],
-    "changeDigest": "sha256:demo-change-chg0044-restore-drill"
+    "changeDigest": "sha256:b3df468e1f135c70cebc850ae2602d21a457c4faa17e3f9b6f3d3984398c8bdd"
   },
   "reconstruction": {
     "graphRef": "graphs/payments-postgres.yaml",
-    "baselineDigest": "sha256:demo-baseline-before-restore-0044",
+    "baselineDigest": "sha256:b73b86ac92f42e8fc40cbaa5d51f69f5277d6ae03e3300cfe4d0640fb788cfd6",
     "facts": [
       {
         "id": "F1",
@@ -55,7 +57,8 @@
       "Isolated namespace restore completed within RTO",
       "Cross-component consistency checks passed",
       "payments checkout probe succeeded against restored data"
-    ]
+    ],
+    "semanticDigest": "sha256:f1ac7cdd3dd3e2c420e4b16d7ce48161b5c2514afe3c71b7825883ae413f56af"
   },
   "verdict": {
     "decision": "ALLOW",
@@ -67,19 +70,26 @@
       "PROVED requires application-level verification"
     ],
     "policyRef": "restore/contracts/recovery-contract.yaml",
-    "policySha256": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    "policySha256": "sha256:2c1e0fb8c148aada9734dbae61f62cb32f8e593ed03f7ce31b44d814d5189fff"
   },
   "evidence": {
     "retentionDays": 365,
-    "envelopeSha256": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "envelopeSha256": "sha256:8af063ec68baee8aad202dc11adb9bb2b030ba15eeec98ff01a8af99ab0967bb",
     "artifacts": [
       {
         "path": "restore/contracts/recovery-contract.yaml",
-        "description": "Recovery Contract requirements"
+        "description": "Recovery Contract requirements",
+        "sha256": "sha256:2c1e0fb8c148aada9734dbae61f62cb32f8e593ed03f7ce31b44d814d5189fff"
       },
       {
         "path": "restore/RP-0018/summary.json",
-        "description": "Drill summary with PROVED verdict"
+        "description": "Drill summary with PROVED verdict",
+        "sha256": "sha256:032c909bfa04752ab311321575a4c996b1cb9d5b2d21467f2505d4b628df95ea"
+      },
+      {
+        "path": "restore/RP-0018/drill.yaml",
+        "description": "Drill definition (PROTECT, VALIDATE, RESTORE, PROVE)",
+        "sha256": "sha256:f1ac7cdd3dd3e2c420e4b16d7ce48161b5c2514afe3c71b7825883ae413f56af"
       }
     ]
   },

@@ -1,0 +1,7 @@
+# ILLUSTRATIVE fixture for the fictional Acme estate. Decision computed by tools/check_policies.py.
+id: gpu-drill2-quota-exceed
+chapter: "14"
+scenario: "Drill 2 - tenant at quota requests another GPU"
+request: {tenant: payments-ml, gpus: 1, gpuClass: nvidia-l4, initiator: human}
+snapshot: {status: available, tenantAllocated: {payments-ml: 4, inference: 1}, poolAllocated: 5}
+expected: BLOCK
