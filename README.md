@@ -35,6 +35,7 @@ make negative   # tampering and missing-field mutations that must be rejected
 make test       # pytest
 make results    # regenerate results/results.json and docs/EVIDENCE.md
 make ci         # everything CI runs, including a drift check on generated files
+make e2e        # the PreSync gate on a kind cluster with Argo CD (Docker + kind + kubectl)
 ```
 
 Requires Python 3.10+ with the pinned packages in `requirements.txt`. `make validate` exits non-zero if
@@ -55,7 +56,8 @@ commit SHA and run id as a build artifact.
 | Inference budget (`policies/inference-budget.yaml`) | Schema and admission decisions on fixtures, including a unit-price rehearsal | Budgets, prices and traffic |
 | GPU admission (`policies/gpu-admission.yaml`) | Schema and admission decisions on fixtures, autoscaler conflict detection | Pool size, class, quotas; no scheduling, no latency measurement |
 | Restore (`restore/`) | PROVED/UNPROVED logic against the Recovery Contract, StorageClass coverage that explains CHG-0042's BLOCK | Logs, RTO values, row counts |
-| Manifests (`apps/`, `infra/`) | Reviewed as text | No cluster runs in this repository |
+| PreSync gate (`cluster/`) | Argo CD PreSync hook on a kind cluster: BLOCK, hold, ALLOW, store down, edited package, manual sync | A ConfigMap stands in for each change; one node |
+| Manifests (`apps/`, `infra/`) | Reviewed as text | Not applied to any cluster |
 
 ## Evidence packages
 
@@ -82,7 +84,8 @@ See [`evidence/README.md`](evidence/README.md) for what each digest covers.
 | `agents/` | Agent Security Contract, catalog, approvals, scenario corpus |
 | `tools/` | Validators, gate, corpus runner, result generator |
 | `scripts/` | `validate-evidence.sh` |
-| `results/` | Generated `results.json` and retained envelopes |
+| `cluster/` | kind + Argo CD e2e: PreSync gate, evidence store, scenarios |
+| `results/` | Generated `results.json`, retained envelopes, and the recorded kind run (`results/cluster/`) |
 | `docs/` | Generated `EVIDENCE.md`, chapter notes, vocabulary mapping |
 
 ## Chapter map
@@ -92,13 +95,13 @@ See [`evidence/README.md`](evidence/README.md) for what each digest covers.
 | 1 | `docs/ch01-green-is-not-safe.md`, `evidence/CHG-0042.json` |
 | 2 | `docs/ch02-desired-vs-live.md`, `graphs/` |
 | 3–6 | `graphs/`, `rehearsals/`, `evidence/schema/` |
-| 7 | `policies/fail-closed.yaml` |
+| 7 | `policies/fail-closed.yaml`, `cluster/` |
 | 8 | `restore/`, `evidence/CHG-0044.json`, `make restore` |
 | 9 | Rollback is discussed in the book; this repository has no rollback drill |
-| 10 | `policies/evidence-system-availability.yaml`, `evidence/CHG-0045.json` |
+| 10 | `policies/evidence-system-availability.yaml`, `evidence/CHG-0045.json`, `cluster/scenarios.yaml` |
 | 11–12 | `agents/`, `evidence/CHG-0043.json`, `make corpus` |
 | 13–14 | `policies/inference-budget.yaml`, `policies/gpu-admission.yaml`, `make policies` |
-| 15–21 | Full pipeline, `make ci`, `docs/vocabulary-mapping.md` |
+| 15–21 | Full pipeline, `make ci`, `make e2e`, `docs/vocabulary-mapping.md` |
 
 Related public reference implementations by the author: `architecture-rehearsal`,
 `agent-security-contract`, `kanister-backup-restore`, `blastguard` (github.com/justrunme). Vocabulary

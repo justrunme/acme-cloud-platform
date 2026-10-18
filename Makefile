@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: validate corpus envelopes policies restore negative test results check-generated ci
+.PHONY: validate corpus envelopes policies restore negative test results check-generated ci e2e
 
 validate:            ## Evidence packages: schema + real digests + fail-closed rules
 	PYTHON=$(PYTHON) ./scripts/validate-evidence.sh
@@ -31,3 +31,6 @@ check-generated:     ## Fail if committed results differ from a fresh run
 	git diff --exit-code -- results docs/EVIDENCE.md
 
 ci: validate corpus envelopes policies restore negative test check-generated
+
+e2e:                 ## PreSync gate on kind + Argo CD (needs Docker, kind, kubectl; see cluster/README.md)
+	PYTHON=$(PYTHON) ./cluster/e2e.sh

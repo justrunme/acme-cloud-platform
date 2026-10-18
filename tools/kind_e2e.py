@@ -14,6 +14,7 @@ import platform
 import subprocess
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 from tools.common import ROOT, load_yaml, write_json
@@ -109,12 +110,20 @@ def run_scenario(sc: dict, repo: str, revision: str, timeout: int) -> dict:
         "record": gate.get("record"),
         "sync_phase": op.get("phase"), "sync_message": op.get("message"),
         "sync_started": op.get("startedAt"), "sync_finished": op.get("finishedAt"),
+        "sync_seconds": _seconds(op.get("startedAt"), op.get("finishedAt")),
         "applied": applied,
     }
     row["ok"] = (row["gate_decision"] == exp["decision"] and row["gate_reason"] == exp["reason"]
                  and applied == exp["applied"]
                  and row["sync_phase"] == ("Succeeded" if exp["applied"] else "Failed"))
     return row
+
+
+def _seconds(start: str | None, end: str | None) -> int | None:
+    if not start or not end:
+        return None
+    parse = lambda t: datetime.strptime(t, "%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
+    return int((parse(end) - parse(start)).total_seconds())
 
 
 def setup_facts() -> dict:
@@ -160,7 +169,7 @@ def main(argv: list[str] | None = None) -> int:
         "schema_version": "acme.cluster-e2e/v1",
         "illustrative_estate": True,
         "note": "Results of running cluster/e2e.sh on the setup below. They hold on this setup only: one kind "
-                "node, a stand-in ConfigMap as the change, and an in-memory evidence store.",
+                "node, a ConfigMap standing in for the change, and a single-pod evidence store.",
         "revision": args.revision,
         "repo": args.repo,
         "run_id": os.environ.get("GITHUB_RUN_ID"),
@@ -176,6 +185,7 @@ def main(argv: list[str] | None = None) -> int:
             "allowed_and_applied": sum(r["applied"] and r["gate_decision"] == "ALLOW" for r in rows),
             "records_retained": len(records),
             "gate_elapsed_ms_max": max((r["gate_elapsed_ms"] or 0) for r in rows),
+            "sync_seconds_max": max((r["sync_seconds"] or 0) for r in rows),
             "all_passed": passed == len(rows),
         },
     }

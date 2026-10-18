@@ -43,3 +43,35 @@ jobs:
           path: |
             results/
             docs/EVIDENCE.md
+
+  kind-e2e:
+    # The PreSync gate on a real kind cluster with Argo CD (cluster/README.md).
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      KIND_VERSION: v0.24.0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Install kind
+        run: |
+          curl -sSLo kind "https://kind.sigs.k8s.io/dl/${KIND_VERSION}/kind-linux-amd64"
+          sudo install kind /usr/local/bin/kind
+          kind version
+          kubectl version --client
+      - name: Run scenarios on kind + Argo CD
+        env:
+          # Argo CD fetches the manifests from GitHub at the commit under test.
+          REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: ./cluster/e2e.sh
+      - name: Upload cluster results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: acme-kind-e2e
+          path: results/cluster/kind-e2e.json
+          if-no-files-found: warn

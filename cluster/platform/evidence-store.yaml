@@ -3,6 +3,18 @@ kind: Namespace
 metadata:
   name: acme-evidence
 ---
+# Records survive the store being scaled to zero, as retained evidence should.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: evidence-records
+  namespace: acme-evidence
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,6 +22,8 @@ metadata:
   namespace: acme-evidence
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: evidence-store
@@ -18,6 +32,8 @@ spec:
       labels:
         app: evidence-store
     spec:
+      securityContext:
+        fsGroup: 65534
       containers:
         - name: store
           image: acme-gate:e2e
@@ -38,7 +54,8 @@ spec:
               mountPath: /var/lib/acme
       volumes:
         - name: records
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: evidence-records
 ---
 apiVersion: v1
 kind: Service

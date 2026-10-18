@@ -7,8 +7,9 @@ GET  /records           list retained records as JSON
 GET  /records/<name>    read one record
 GET  /healthz           liveness
 
-Records live in ACME_RECORDS_DIR (default /var/lib/acme/records), an emptyDir in the e2e: they are
-lost with the pod. This is a teaching store, not a retention system.
+Records live in ACME_RECORDS_DIR (default /var/lib/acme/records), a PersistentVolumeClaim in the e2e,
+so they survive the store being scaled to zero. This is a teaching store, not a retention system:
+no authentication, no replication, no retention policy.
 """
 from __future__ import annotations
 
