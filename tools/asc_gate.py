@@ -180,12 +180,20 @@ def _evaluate(scenario: dict, root: Path, policy_rel: str) -> dict:
     }
 
 
-def evaluate(scenario: dict, root: Path = ROOT, policy_rel: str | None = None) -> dict:
-    """Evaluate with a hard timeout. Timeout, missing dependency or evaluator error => BLOCK."""
-    policy_rel = policy_rel or scenario["spec"].get("policyRef", "agents/contracts/demo-agent.policy.yaml")
+DEFAULT_POLICY = "agents/contracts/demo-agent.policy.yaml"
+
+
+def evaluate(scenario: dict, root: Path = ROOT,
+             policy_rel: str | None = None) -> dict:
+    """Evaluate with a hard timeout.
+
+    Timeout, missing dependency or evaluator error => BLOCK."""
+    policy_rel = (policy_rel
+                  or scenario["spec"].get("policyRef", DEFAULT_POLICY))
     timeout_ms = 1000
     try:
-        timeout_ms = int(load_doc(repo_path(root, policy_rel))["spec"].get("evaluatorTimeoutMs", 1000))
+        pspec = load_doc(repo_path(root, policy_rel))["spec"]
+        timeout_ms = int(pspec.get("evaluatorTimeoutMs", 1000))
     except Exception:
         pass
     pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -193,11 +201,14 @@ def evaluate(scenario: dict, root: Path = ROOT, policy_rel: str | None = None) -
     try:
         result = fut.result(timeout=timeout_ms / 1000)
     except concurrent.futures.TimeoutError:
-        result = _failclosed(scenario, root, "evaluator_timeout", f"evaluator exceeded {timeout_ms} ms")
+        result = _failclosed(scenario, root, "evaluator_timeout",
+                             f"evaluator exceeded {timeout_ms} ms")
     except Unavailable as exc:
-        result = _failclosed(scenario, root, "evaluator_unavailable", str(exc))
+        result = _failclosed(scenario, root, "evaluator_unavailable",
+                             str(exc))
     except Exception as exc:  # any evaluator error fails closed
-        result = _failclosed(scenario, root, "evaluator_error", f"{type(exc).__name__}: {exc}")
+        result = _failclosed(scenario, root, "evaluator_error",
+                             f"{type(exc).__name__}: {exc}")
     finally:
         pool.shutdown(wait=False, cancel_futures=True)
     result["policy_ref"] = policy_rel
@@ -236,7 +247,7 @@ def main(argv: list[str] | None = None) -> int:
     sc = load_doc(args.scenario)
     if args.cmd == "digest":
         trace = load_trace(sc, ROOT)
-        policy = load_doc(ROOT / sc["spec"].get("policyRef", "agents/contracts/demo-agent.policy.yaml"))
+        policy = load_doc(ROOT / sc["spec"].get("policyRef", DEFAULT_POLICY))
         c = next(c for c in trace["calls"] if c["id"] == args.call)
         print(request_digest(trace["agent"], c["tool"], c["args"], policy["metadata"]["version"]))
         return 0

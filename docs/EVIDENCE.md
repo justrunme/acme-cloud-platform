@@ -4,7 +4,7 @@
 
 Acme is a **fictional** estate that accompanies the book *Prove It Before Production*. Everything below is the result of running this repository's own checks on its own corpus and fixtures. Claims hold **on this corpus of 25 scenarios** and these fixtures only; they do not imply general agent safety or production behavior.
 
-- Inputs digest: `sha256:82676e2c3c047e158bc2db2195acc2ce414e4f7481f36ebcf821bea5924b325d`
+- Inputs digest: `sha256:6f8d94231531301c7e03bfcbcb5d3f9eceea128844f593b7f3a0aa7d3ebb6773`
 - Overall: **PASS**
 
 ## Agent security corpus (Chapter 12)
