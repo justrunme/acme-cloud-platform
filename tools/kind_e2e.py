@@ -38,7 +38,9 @@ def application(name: str, path: str, repo: str, revision: str, auto: bool) -> d
         "syncPolicy": {"syncOptions": ["CreateNamespace=true"]},
     }
     if auto:
+        # One attempt: a blocked change stays blocked until its evidence changes, so retries add nothing.
         spec["syncPolicy"]["automated"] = {}
+        spec["syncPolicy"]["retry"] = {"limit": 0}
     return {"apiVersion": "argoproj.io/v1alpha1", "kind": "Application",
             "metadata": {"name": name, "namespace": "argocd"}, "spec": spec}
 
@@ -76,6 +78,8 @@ def gate_decision(ns: str) -> dict | None:
 def run_scenario(sc: dict, repo: str, revision: str, timeout: int) -> dict:
     name = f"e2e-{sc['id']}"
     store_up = sc["store"] == "up"
+    kubectl("delete", "application", name, "-n", "argocd", "--ignore-not-found", "--wait=true")
+    kubectl("delete", "namespace", name, "--ignore-not-found", "--wait=true")
     if not store_up:
         set_store(False)
     try:
