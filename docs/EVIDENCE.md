@@ -4,7 +4,7 @@
 
 Acme is a **fictional** estate that accompanies the book *Prove It Before Production*. Everything below is the result of running this repository's own checks on its own corpus and fixtures. Claims hold **on this corpus of 25 scenarios** and these fixtures only; they do not imply general agent safety or production behavior.
 
-- Inputs digest: `sha256:a84601da597ff5497dcc67023a6e58643b3acbd8192c2822f823b4dc3621d926`
+- Inputs digest: `sha256:82676e2c3c047e158bc2db2195acc2ce414e4f7481f36ebcf821bea5924b325d`
 - Overall: **PASS**
 
 ## Agent security corpus (Chapter 12)
@@ -117,7 +117,7 @@ Decision logic only, over illustrative RestorePoint files.
 
 ## Not covered here
 
-- No Kubernetes cluster runs in this repository. Manifests are reviewed, not applied.
+- The workload manifests in `apps/` and `infra/` are reviewed, not applied. The kind e2e applies only the gate, the evidence store and a ConfigMap that stands in for each change (`cluster/`).
 - The agent gate evaluates recorded traces; it is not wired to a live MCP server. NetworkPolicy for the gateway path is a manifest (`apps/agent/networkpolicy.yaml`), not a tested runtime control.
 - RestorePoint logs, RTO values, timestamps and actors are illustrative.
 - GPU noisy-neighbor latency and preemption drills need a real GPU pool and are not executed.

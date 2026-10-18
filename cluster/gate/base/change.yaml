@@ -1,0 +1,8 @@
+# Stand-in for the mutation under review. If this object exists after a sync,
+# the change was applied; if the gate said anything but ALLOW, it must not exist.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: applied-change
+data:
+  change: CHANGE-ID-SET-BY-OVERLAY

@@ -1,0 +1,41 @@
+# kind e2e scenarios (cluster/README.md). Each one is an Argo CD Application that syncs a
+# change directory under cluster/changes/. The PreSync gate runs before anything is applied.
+#   store:   up | down     evidence store state while the sync runs
+#   trigger: auto | manual auto = automated sync policy; manual = a sync operation on the
+#                          Application, the same request the Argo CD UI and CLI send
+scenarios:
+  - id: chg-0042-block
+    path: cluster/changes/chg-0042
+    store: up
+    trigger: auto
+    expect: {decision: BLOCK, reason: verdict_block, applied: false}
+  - id: chg-0043-hold
+    path: cluster/changes/chg-0043
+    store: up
+    trigger: auto
+    expect: {decision: REQUIRE_APPROVAL, reason: approval_required, applied: false}
+  - id: chg-0044-allow
+    path: cluster/changes/chg-0044
+    store: up
+    trigger: auto
+    expect: {decision: ALLOW, reason: verdict_allow, applied: true}
+  - id: chg-0045-store-down
+    path: cluster/changes/chg-0045
+    store: down
+    trigger: auto
+    expect: {decision: BLOCK, reason: evidence_store_unavailable, applied: false}
+  - id: chg-0044-store-down
+    path: cluster/changes/chg-0044
+    store: down
+    trigger: auto
+    expect: {decision: BLOCK, reason: evidence_store_unavailable, applied: false}
+  - id: chg-0042-edited-to-allow
+    path: cluster/changes/chg-0042-edited
+    store: up
+    trigger: auto
+    expect: {decision: BLOCK, reason: evidence_invalid, applied: false}
+  - id: chg-0042-manual-sync
+    path: cluster/changes/chg-0042
+    store: up
+    trigger: manual
+    expect: {decision: BLOCK, reason: verdict_block, applied: false}

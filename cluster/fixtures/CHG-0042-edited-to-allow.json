@@ -1,0 +1,136 @@
+{
+  "apiVersion": "evidence.acme.example/v1alpha1",
+  "kind": "EvidencePackage",
+  "metadata": {
+    "id": "CHG-0042",
+    "createdAt": "2026-10-14T15:22:00Z",
+    "actor": "engineer@acme.example",
+    "illustrative": true,
+    "illustrativeNote": "Tampered copy of CHG-0042 for the kind e2e: the verdict was edited to ALLOW after sealing. The gate must reject it.",
+    "traceId": "tr-chg-0042-payments-pg16",
+    "commitSha": "demo0000000000000000000000000000000042",
+    "labels": {
+      "chapter": "1",
+      "service": "payments",
+      "risk": "data-plane"
+    }
+  },
+  "change": {
+    "summary": "Upgrade PostgreSQL 15 → 16 for payments database",
+    "intent": "upgrade",
+    "targets": [
+      {
+        "kind": "StatefulSet",
+        "name": "postgres",
+        "namespace": "payments"
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "name": "postgres-data",
+        "namespace": "payments"
+      }
+    ],
+    "naiveSignals": [
+      "terraform plan clean",
+      "CI green",
+      "policy scan passed",
+      "staging module apply succeeded last week",
+      "GitOps would report Synced after merge"
+    ],
+    "changeDigest": "sha256:2871e2435d5c220fefe426a2610bd01904ee0d4a9c129ac2bf84e1ccdd792be7"
+  },
+  "reconstruction": {
+    "graphRef": "graphs/payments-postgres.yaml",
+    "baselineDigest": "sha256:b73b86ac92f42e8fc40cbaa5d51f69f5277d6ae03e3300cfe4d0640fb788cfd6",
+    "facts": [
+      {
+        "id": "F1",
+        "statement": "payments Deployment depends on Service postgres.payments.svc for checkout transactions",
+        "source": "apps/payments/deployment.yaml",
+        "confidence": "observed"
+      },
+      {
+        "id": "F2",
+        "statement": "postgres StatefulSet binds PVC postgres-data using StorageClass fast-ssd-v1",
+        "source": "infra/postgres/statefulset.yaml",
+        "confidence": "observed"
+      },
+      {
+        "id": "F3",
+        "statement": "Last successful RestorePoint drill (RP-0017) assumed StorageClass fast-ssd-v1 volume binding mode Immediate and retain policy",
+        "source": "restore/RP-0017/summary.json",
+        "confidence": "observed"
+      },
+      {
+        "id": "F4",
+        "statement": "Proposed upgrade path reprovisions the PVC onto StorageClass fast-ssd-v2 (CSI driver change)",
+        "source": "rehearsals/CHG-0042-postgres-upgrade.yaml",
+        "confidence": "inferred"
+      }
+    ],
+    "unknowns": [
+      "Whether RP-0017 restore procedure remains valid on fast-ssd-v2",
+      "Whether staging cluster even has fast-ssd-v2 (parity gap)"
+    ]
+  },
+  "rehearsal": {
+    "kind": "architecture",
+    "scenarioRef": "rehearsals/CHG-0042-postgres-upgrade.yaml",
+    "result": "fail",
+    "risk": "high",
+    "semanticDigest": "sha256:7d514d6facdabc307960559d15808a59a7ce84f7dbad180b25edd2816cb167a7",
+    "findings": [
+      "Dependency chain payments → postgres → PVC → StorageClass would change under apply",
+      "Tested recovery path RP-0017 is keyed to fast-ssd-v1 binding behaviour",
+      "No restore rehearsal exists for fast-ssd-v2",
+      "Staging success does not cover this StorageClass branch"
+    ]
+  },
+  "verdict": {
+    "decision": "ALLOW",
+    "rehearsalDecision": "approve",
+    "reason": "StorageClass migration would invalidate the tested recovery path. Upgrade may proceed only after a RestorePoint drill on the target StorageClass produces passing evidence.",
+    "principle": "Unknown ≠ Safe",
+    "criteria": [
+      "Reconstruction includes application → data → storage chain",
+      "Rehearsal must preserve or re-prove recovery path",
+      "Missing restore proof on target StorageClass ⇒ BLOCK"
+    ],
+    "policyRef": "policies/fail-closed.yaml",
+    "policySha256": "sha256:15ae71376c6efaafda2ac36a68b120349d8c40192cb9bb4592c336a65349bbce"
+  },
+  "evidence": {
+    "retentionDays": 365,
+    "generatedDocsHint": "Human-facing claims must be generated from this package; do not hand-type metrics",
+    "envelopeSha256": "sha256:42d5feea5ae6d86b44fb14c63cf27e31aa96d20ecb1e24ec50b70978a6f4237c",
+    "artifacts": [
+      {
+        "path": "graphs/payments-postgres.yaml",
+        "description": "Dependency graph used for blast-radius reconstruction",
+        "sha256": "sha256:b73b86ac92f42e8fc40cbaa5d51f69f5277d6ae03e3300cfe4d0640fb788cfd6"
+      },
+      {
+        "path": "rehearsals/CHG-0042-postgres-upgrade.yaml",
+        "description": "Architecture rehearsal scenario and expected failure",
+        "sha256": "sha256:7d514d6facdabc307960559d15808a59a7ce84f7dbad180b25edd2816cb167a7"
+      },
+      {
+        "path": "restore/RP-0017/summary.json",
+        "description": "Last passing restore drill — incompatible with proposed storage path",
+        "sha256": "sha256:af3a6114e756a9c117141d3519777df9a64079a9bdd36cbfde312206d8fc4aac"
+      },
+      {
+        "path": "policies/fail-closed.yaml",
+        "description": "Policy: insufficient recovery evidence blocks data-plane upgrades",
+        "sha256": "sha256:15ae71376c6efaafda2ac36a68b120349d8c40192cb9bb4592c336a65349bbce"
+      }
+    ]
+  },
+  "lineage": {
+    "inspiredBy": [
+      "https://github.com/justrunme/architecture-rehearsal",
+      "https://github.com/justrunme/kanister-backup-restore",
+      "https://github.com/justrunme/blastguard"
+    ]
+  }
+}

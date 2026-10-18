@@ -60,7 +60,8 @@ def repo_path(root: Path, rel: str) -> Path:
 
 
 # Files whose bytes determine every generated result. Generated outputs are excluded.
-INPUT_DIRS = ("agents", "apps", "evidence", "graphs", "infra", "policies", "rehearsals", "restore", "tools", "scripts")
+INPUT_DIRS = ("agents", "apps", "cluster", "evidence", "graphs", "infra", "policies", "rehearsals", "restore", "tools",
+              "scripts")
 
 
 def inputs_digest(root: Path = ROOT, dirs: Iterable[str] = INPUT_DIRS) -> str:

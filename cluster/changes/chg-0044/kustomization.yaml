@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../gate/base
+patches:
+  - target:
+      kind: Job
+      name: acme-presync-gate
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: CHG-0044
+      - op: replace
+        path: /spec/template/spec/containers/0/env/1/value
+        value: ""
+  - target:
+      kind: ConfigMap
+      name: applied-change
+    patch: |-
+      - op: replace
+        path: /data/change
+        value: CHG-0044

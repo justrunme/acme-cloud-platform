@@ -1,0 +1,27 @@
+# PreSync hook: Argo CD runs this Job before any resource in the Sync phase.
+# A non-zero exit fails the hook, and Argo CD applies nothing.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: acme-presync-gate
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 120
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: gate
+          image: acme-gate:e2e
+          imagePullPolicy: Never
+          args: ["tools.presync_gate"]
+          env:
+            - name: ACME_CHANGE_ID
+              value: CHANGE-ID-SET-BY-OVERLAY
+            - name: ACME_PACKAGE_PATH
+              value: ""
+            - name: ACME_EVIDENCE_STORE
+              value: http://evidence-store.acme-evidence.svc:8080
