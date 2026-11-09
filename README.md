@@ -111,6 +111,10 @@ Related public reference implementations by the author: `architecture-rehearsal`
 `agent-security-contract`, `kanister-backup-restore`, `blastguard` (github.com/justrunme). Vocabulary
 mapping: [`docs/vocabulary-mapping.md`](docs/vocabulary-mapping.md).
 
+## Author
+
+Author: Andrey Lesnikov, Senior DevOps & AI Platform Engineer, [https://orcid.org/0009-0004-7583-4314](https://orcid.org/0009-0004-7583-4314)
+
 ## License
 
 Code and teaching files in this repository: [Apache License 2.0](LICENSE). The book text is not part of
